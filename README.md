@@ -1,3 +1,3 @@
 # GraphicsEngine
 
-Simple graphics engine with future support of realistic fluid rendering.
+Simple graphics engine with future support of realistic fluid rendering. Utilizes OpenGl.
