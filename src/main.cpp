@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <fcntl.h>
+#include <cmath>
 
 /*
  EXPLAINATION OF HOW OPENGL RENDERS FRAMES:
@@ -45,13 +46,6 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);								 // set minor version to 3 .. this means we are using openGL 3.3
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // set profile to core profile, this means we only have the modern functions
 
-	/* CREATE A TRIANGLE USING VERTICES*/
-	GLfloat vertices[] = {
-			-0.5f, -0.5f * float(sqrt(3)), 0.0f, // bottom left
-			0.5f, -0.5f * float(sqrt(3)), 0.0f,	 // bottom right
-			0.0f, 0.5f * float(sqrt(3)), 0.0f		 // top
-	};
-
 	GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", NULL, NULL); // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
 
 	if (window == NULL) // If the window failed to create then terminate the program
@@ -88,18 +82,25 @@ int main()
 
 	/* END OF SHADERS AND FRAGMENT SECTION*/
 
-	GLuint VBO;																																 // Create a vertex buffer object
-	glGenBuffers(1, &VBO);																										 // Generate a vertex buffer object with 1 because we only have one 3d object, give it the reference value of VBO
+	/* CREATE A TRIANGLE USING VERTICES*/
+	GLfloat vertices[] = {
+			-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // bottom left
+			0.5f, -0.5f * float(sqrt(3) / 3), 0.0f,	 // bottom right
+			0.0f, 0.5f * float(sqrt(3) * 2/3), 0.0f		 // top
+	};
+
+	GLuint VAO, VBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
+
+	glGenVertexArrays(1, &VAO); // Generate a vertex array object with 1 because we only have one 3d object, give it the reference value of VAO .. ORDER MATTERS HERE GENERATE VAO BEFORE VBO
+	glGenBuffers(1, &VBO);			// Generate a vertex buffer object with 1 because we only have one 3d object, give it the reference value of VBO
+	glBindVertexArray(VAO);			// Bind the vertex array object to the current context
+	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	/* Binding is like making a certain object into the current object.
 	And whenever we have a function that modifies that type of object,
 	it will modify the object that is currently bound */
 
-
-
-
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // glBufferData(type of buffer, size of data, data, usage)
-
 	/* Types of usage for buffer data:
 	Static: data will not be changed
 	Dynamic: data will be changed frequently
@@ -107,16 +108,24 @@ int main()
 
 	_Draw: data will be sent to the GPU
 	_Read: data will be read from the GPU
-	_Copy: data will be copied from one buffer to another 
+	_Copy: data will be copied from one buffer to another
 	*/
 
-	// See Explanation on openGL frame rendering at the top of the file
-	glClearColor(0.07f, 0.13f, 0.17f, 1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
-	glClear(GL_COLOR_BUFFER_BIT);						 // Clear the color buffer, which is the buffer that stores the color values for each pixel
-	glfwSwapBuffers(window);								 // Swap the front buffer with the back buffer
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0); // glVertexAttribPointer(index of vertex attribute, size, type, normalized, amount of data so just length of each float multiplied by 3, pointer)
+	glEnableVertexAttribArray(0);																									 // Enable the vertex attribute at index 0 because that is the position of our vertex attribute
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);																							 // Unbind the vertex buffer object
+	glBindVertexArray(0);																													 // Unbind the vertex array object
 
 	while (!glfwWindowShouldClose(window)) // While the window is not closed
 	{
+		glClearColor(0.07f, 0.13f, 0.17f, 1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
+		glClear(GL_COLOR_BUFFER_BIT);						 // Clear the color buffer, which is the buffer that stores the color values for each pixel
+		glUseProgram(shaderProgram);						 // Use the shader program that we created earlier
+		glBindVertexArray(VAO);									 // Bind the vertex array object
+		glDrawArrays(GL_TRIANGLES, 0, 3);				 // Draw the triangle
+		glfwSwapBuffers(window);								 // Swap the front buffer with the back buffer
+
 		glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
 	}
 
