@@ -27,4 +27,4 @@ add_library(glad src/glad.c)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw glad)
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw glad ${CMAKE_DL_LIBS})
