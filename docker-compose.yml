@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  opengl_project:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - DISPLAY=$DISPLAY
+      - TZ:"America/Los_Angeles"
+      - DEBIAN_FRONTEND=noninteractive
+    command: ./main
