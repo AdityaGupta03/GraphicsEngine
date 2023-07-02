@@ -13,4 +13,4 @@ services:
       - DISPLAY=$DISPLAY
       - TZ:"America/Los_Angeles"
       - DEBIAN_FRONTEND=noninteractive
-    command: ./engine
+    command: ./main

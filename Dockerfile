@@ -1,7 +1,7 @@
 # Use a base image with OpenGL support (e.g., NVIDIA's official OpenGL image)
 FROM nvidia/opengl:1.2-glvnd-runtime-ubuntu20.04
 
-# Install required packages
+# Install required packages 
 # RUN apt-get update && apt-get install tzdata && apt-get install -y \
 #     build-essential \
 #     cmake \
