@@ -6,7 +6,7 @@ FROM nvidia/opengl:1.2-glvnd-runtime-ubuntu20.04
 #     build-essential \
 #     cmake \
 #     libglfw3-dev \
-#     libglew-dev 
+#     libglew-dev  
 
 RUN apt-get update && apt-get install tzdata && apt-get install -y \
     g++ \

@@ -11,7 +11,7 @@ find_package(glfw3 REQUIRED)
 # Include directories
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "include")
-include_directories("./include/glad")
+include_directories("include/glad")
 
 # Add source files
 set(SOURCES
