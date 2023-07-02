@@ -22,49 +22,28 @@ int main()
 		return -1;
 	}
 
- /*
-	Explaination of Buffers
-
-	|———————————————————————————————————————————————————————|	After Line is done go to next line
-	|	------------------------------------------------>	| 	↓
-	|	--------------- RENDER DIRECTION --------------->	|	↓
-	|	------------------------------------------------>	|	↓	
-	|	------------------------------------------------>	|	↓
-	|	------------------------------------------------>	|	↓
-	|	------------------------------------------------>	|	↓				
-	|	-------------------- FRAME --------------------->	|	↓
-	|	------------------------------------------------>	|	↓		
-	|	------------------------------------------------>	|	↓ 
-	|	------------------------------------------------>	|	↓
-	|	------------------------------------------------>	|	↓
-	|———————————————————————————————————————————————————————|
-	
-
-	
- 
- 
- 
- 
- 
- 
- 
- 
- */
-
-
-
-
-
-
-
-
-
 	glfwMakeContextCurrent(window); // Make the window the current context .. context is a sort of object that holds the entirity of openGL
 	gladLoadGL();									 // Load all of the openGL functions
 	glViewport(0, 0, 800, 800);		 // Set the viewport to the size of the window, area of openGL that we want to render to .. goes from bottom left corner (0,0) to top right corner (800,800)
 
+	/*
+		EXPLAINATION OF FRAME BUFFERS AND HOW OPENGL WORKS ON A FRAME BY FRAME LEVEL:
+
+	 Each Frame is rendered from left to right, top to bottom, pixel by pixel
+
+	 Frame Buffer: A buffer that stores the color values for each pixel
+
+	 How the code works is that there is a "Front Buffer" and a "Back Buffer"
+	 The front buffer is the buffer that is currently being displayed on the screen
+	 The back buffer is the buffer that is being drawn to
+
+	 When the back buffer is done being drawn to, it is swapped with the front buffer
+
+	*/
+
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
 	glClear(GL_COLOR_BUFFER_BIT);					 // Clear the color buffer, which is the buffer that stores the color values for each pixel
+	glfwSwapBuffers(window);							 // Swap the front buffer with the back buffer
 
 	while(!glfwWindowShouldClose(window)) // While the window is not closed
 	{
