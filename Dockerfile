@@ -10,10 +10,27 @@ FROM nvidia/opengl:1.2-glvnd-runtime-ubuntu20.04
 
 RUN apt-get update && apt-get install tzdata && apt-get install -y \
     g++ \
+    python3 \
     cmake \
+    git \
+    build-essential \
+    libglfw3 \
     libglfw3-dev \
     libgl1-mesa-dev \
     libglu1-mesa-dev 
+
+RUN git clone --recursive https://github.com/Dav1dde/glad.git /tmp/glad
+
+RUN cd /tmp/glad/cmake && \
+    cmake . && \
+    make 
+
+RUN cd /usr/local/lib/ \
+    git clone https://github.com/glfw/glfw.git \
+    cd glfw \
+    cmake . \
+    make \
+    sudo make install
 
 # Set the working directory
 WORKDIR /app
@@ -21,10 +38,10 @@ WORKDIR /app
 # Copy the source code into the container
 COPY . /app
 
-# Build the project
-RUN ./bin/make.sh
+# Run cmake . in /app
 
-EXPOSE 8080
+# Build the project
+# RUN ./bin/make.sh
 
 # Set the entrypoint to run the compiled executable
-ENTRYPOINT [ "./bin/main" ]
+# CMD [ "./bin/main" ]
