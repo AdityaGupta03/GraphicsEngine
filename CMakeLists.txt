@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(OpenGLProject)
+project(GraphicsEngine)
 
 # Set C++ version
 set(CMAKE_CXX_STANDARD 14)
@@ -19,6 +19,10 @@ set(SOURCES
     src/glad.c
     # Add more source files here if necessary
 )
+
+if (APPLE)
+
+endif (APPLE)
 
 # Add GLAD library
 add_library(glad src/glad.c)

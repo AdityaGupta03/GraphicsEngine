@@ -10,12 +10,17 @@ FROM nvidia/opengl:1.2-glvnd-runtime-ubuntu20.04
 
 RUN apt-get update && apt-get install tzdata && apt-get install -y \
     g++ \
+    firefox \
     python3 \
     cmake \
     git \
     build-essential \
     libglfw3 \
     libglfw3-dev \
+    xorg \
+    xvfb \
+    xauth \
+    x11vnc \
     libgl1-mesa-dev \
     libglu1-mesa-dev 
 
@@ -32,16 +37,22 @@ RUN cd /usr/local/lib/ \
     make \
     sudo make install
 
+ENV XAUTHORITY=/.Xauthority
+
 # Set the working directory
 WORKDIR /app
 
 # Copy the source code into the container
 COPY . /app
 
-# Run cmake . in /app
+# Build the project
+RUN cmake . && make
+
+EXPOSE 8080
 
 # Build the project
 # RUN ./bin/make.sh
 
 # Set the entrypoint to run the compiled executable
-# CMD [ "./bin/main" ]
+CMD [ "/usr/bin/firefox" ]
+ENTRYPOINT [ "./GraphicsEngine" ]

@@ -10,7 +10,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     environment:
-      - DISPLAY=$DISPLAY
+      - DISPLAY=${DISPLAY}
       - TZ:"America/Los_Angeles"
       - DEBIAN_FRONTEND=noninteractive
     command: ./main

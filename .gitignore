@@ -30,3 +30,20 @@
 *.exe
 *.out
 *.app
+
+# Editor Specific
+.vscode
+.vscode/*
+.idea
+.idea/*
+
+# CMAKE/Build Specific
+cmake-build-debug
+cmake-build-debug/*
+CMakeCache.txt
+CMakeFiles
+CMakeFiles/*
+cmake_install.cmake
+libglad.a
+GraphicsEngine
+Makefile
