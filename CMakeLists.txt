@@ -12,6 +12,7 @@ find_package(glfw3 REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "include")
 include_directories("./include/glad")
+include_directories("./include/KHR")
 
 # Add source files
 set(SOURCES
@@ -20,10 +21,6 @@ set(SOURCES
     # Add more source files here if necessary
 )
 
-if (APPLE)
-
-endif (APPLE)
-
 # Add GLAD library
 add_library(glad src/glad.c)
 
@@ -31,4 +28,4 @@ add_library(glad src/glad.c)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw glad ${CMAKE_DL_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw ${CMAKE_DL_LIBS})
