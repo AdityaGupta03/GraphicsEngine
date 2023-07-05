@@ -71,7 +71,7 @@ extern "C" {
  *  * `GLFW_EXPOSE_NATIVE_OSMESA`
  *
  *  These macros select which of the native access functions that are declared
- *  and which platform-specific headers to include.  It is then up your (by
+ *  and which platform-specific headers to deps.  It is then up your (by
  *  definition platform-specific) code to handle which of these should be
  *  defined.
  *
@@ -82,7 +82,7 @@ extern "C" {
  *  #define GLFW_EXPOSE_NATIVE_WIN32
  *  #define GLFW_EXPOSE_NATIVE_WGL
  *  #define GLFW_NATIVE_INCLUDE_NONE
- *  #include <GLFW/glfw3native.h>
+ *  #deps <GLFW/glfw3native.h>
  *  @endcode
  */
 
@@ -93,60 +93,60 @@ extern "C" {
 
 #if !defined(GLFW_NATIVE_INCLUDE_NONE)
 
- #if defined(GLFW_EXPOSE_NATIVE_WIN32) || defined(GLFW_EXPOSE_NATIVE_WGL)
-  /* This is a workaround for the fact that glfw3.h needs to export APIENTRY (for
-   * example to allow applications to correctly declare a GL_KHR_debug callback)
-   * but windows.h assumes no one will define APIENTRY before it does
-   */
-  #if defined(GLFW_APIENTRY_DEFINED)
-   #undef APIENTRY
-   #undef GLFW_APIENTRY_DEFINED
-  #endif
-  #include <windows.h>
- #elif defined(GLFW_EXPOSE_NATIVE_COCOA) || defined(GLFW_EXPOSE_NATIVE_NSGL)
-  #if defined(__OBJC__)
-   #import <Cocoa/Cocoa.h>
-  #else
-   #include <ApplicationServices/ApplicationServices.h>
-   #include <objc/objc.h>
-  #endif
- #elif defined(GLFW_EXPOSE_NATIVE_X11) || defined(GLFW_EXPOSE_NATIVE_GLX)
-  #include <X11/Xlib.h>
-  #include <X11/extensions/Xrandr.h>
- #elif defined(GLFW_EXPOSE_NATIVE_WAYLAND)
-  #include <wayland-client.h>
- #endif
+#if defined(GLFW_EXPOSE_NATIVE_WIN32) || defined(GLFW_EXPOSE_NATIVE_WGL)
+/* This is a workaround for the fact that glfw3.h needs to export APIENTRY (for
+ * example to allow applications to correctly declare a GL_KHR_debug callback)
+ * but windows.h assumes no one will define APIENTRY before it does
+ */
+#if defined(GLFW_APIENTRY_DEFINED)
+#undef APIENTRY
+#undef GLFW_APIENTRY_DEFINED
+#endif
+#deps <windows.h>
+#elif defined(GLFW_EXPOSE_NATIVE_COCOA) || defined(GLFW_EXPOSE_NATIVE_NSGL)
+#if defined(__OBJC__)
+#import <Cocoa/Cocoa.h>
+#else
+#deps <ApplicationServices/ApplicationServices.h>
+#deps <objc/objc.h>
+#endif
+#elif defined(GLFW_EXPOSE_NATIVE_X11) || defined(GLFW_EXPOSE_NATIVE_GLX)
+#deps <X11/Xlib.h>
+#deps <X11/extensions/Xrandr.h>
+#elif defined(GLFW_EXPOSE_NATIVE_WAYLAND)
+#deps <wayland-client.h>
+#endif
 
- #if defined(GLFW_EXPOSE_NATIVE_WGL)
-  /* WGL is declared by windows.h */
- #endif
- #if defined(GLFW_EXPOSE_NATIVE_NSGL)
-  /* NSGL is declared by Cocoa.h */
- #endif
+#if defined(GLFW_EXPOSE_NATIVE_WGL)
+/* WGL is declared by windows.h */
+#endif
+#if defined(GLFW_EXPOSE_NATIVE_NSGL)
+/* NSGL is declared by Cocoa.h */
+#endif
  #if defined(GLFW_EXPOSE_NATIVE_GLX)
-  /* This is a workaround for the fact that glfw3.h defines GLAPIENTRY because by
-   * default it also acts as an OpenGL header
-   * However, glx.h will include gl.h, which will define it unconditionally
-   */
-  #if defined(GLFW_GLAPIENTRY_DEFINED)
-   #undef GLAPIENTRY
-   #undef GLFW_GLAPIENTRY_DEFINED
-  #endif
-  #include <GL/glx.h>
+/* This is a workaround for the fact that glfw3.h defines GLAPIENTRY because by
+ * default it also acts as an OpenGL header
+ * However, glx.h will deps gl.h, which will define it unconditionally
+ */
+#if defined(GLFW_GLAPIENTRY_DEFINED)
+#undef GLAPIENTRY
+#undef GLFW_GLAPIENTRY_DEFINED
+#endif
+#deps <GL/glx.h>
  #endif
  #if defined(GLFW_EXPOSE_NATIVE_EGL)
-  #include <EGL/egl.h>
+#deps <EGL/egl.h>
  #endif
  #if defined(GLFW_EXPOSE_NATIVE_OSMESA)
-  /* This is a workaround for the fact that glfw3.h defines GLAPIENTRY because by
-   * default it also acts as an OpenGL header
-   * However, osmesa.h will include gl.h, which will define it unconditionally
-   */
-  #if defined(GLFW_GLAPIENTRY_DEFINED)
-   #undef GLAPIENTRY
-   #undef GLFW_GLAPIENTRY_DEFINED
-  #endif
-  #include <GL/osmesa.h>
+/* This is a workaround for the fact that glfw3.h defines GLAPIENTRY because by
+ * default it also acts as an OpenGL header
+ * However, osmesa.h will deps gl.h, which will define it unconditionally
+ */
+#if defined(GLFW_GLAPIENTRY_DEFINED)
+#undef GLAPIENTRY
+#undef GLFW_GLAPIENTRY_DEFINED
+#endif
+#deps <GL/osmesa.h>
  #endif
 
 #endif /*GLFW_NATIVE_INCLUDE_NONE*/
@@ -163,7 +163,7 @@ extern "C" {
  *  of the specified monitor, or `NULL` if an [error](@ref error_handling)
  *  occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -180,7 +180,7 @@ GLFWAPI const char* glfwGetWin32Adapter(GLFWmonitor* monitor);
  *  `\\.\DISPLAY1\Monitor0`) of the specified monitor, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -196,7 +196,7 @@ GLFWAPI const char* glfwGetWin32Monitor(GLFWmonitor* monitor);
  *  @return The `HWND` of the specified window, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @remark The `HDC` associated with the window can be queried with the
  *  [GetDC](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc)
@@ -222,7 +222,7 @@ GLFWAPI HWND glfwGetWin32Window(GLFWwindow* window);
  *  @return The `HGLRC` of the specified window, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @remark The `HDC` associated with the window can be queried with the
@@ -249,7 +249,7 @@ GLFWAPI HGLRC glfwGetWGLContext(GLFWwindow* window);
  *  @return The `CGDirectDisplayID` of the specified monitor, or
  *  `kCGNullDirectDisplay` if an [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -265,7 +265,7 @@ GLFWAPI CGDirectDisplayID glfwGetCocoaMonitor(GLFWmonitor* monitor);
  *  @return The `NSWindow` of the specified window, or `nil` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -283,7 +283,7 @@ GLFWAPI id glfwGetCocoaWindow(GLFWwindow* window);
  *  @return The `NSOpenGLContext` of the specified window, or `nil` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -302,7 +302,7 @@ GLFWAPI id glfwGetNSGLContext(GLFWwindow* window);
  *  @return The `Display` used by GLFW, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -318,7 +318,7 @@ GLFWAPI Display* glfwGetX11Display(void);
  *  @return The `RRCrtc` of the specified monitor, or `None` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -334,7 +334,7 @@ GLFWAPI RRCrtc glfwGetX11Adapter(GLFWmonitor* monitor);
  *  @return The `RROutput` of the specified monitor, or `None` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -350,7 +350,7 @@ GLFWAPI RROutput glfwGetX11Monitor(GLFWmonitor* monitor);
  *  @return The `Window` of the specified window, or `None` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -365,7 +365,7 @@ GLFWAPI Window glfwGetX11Window(GLFWwindow* window);
  *
  *  @param[in] string A UTF-8 encoded string.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED and @ref
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED and @ref
  *  GLFW_PLATFORM_ERROR.
  *
  *  @pointer_lifetime The specified string is copied before this function
@@ -391,7 +391,7 @@ GLFWAPI void glfwSetX11SelectionString(const char* string);
  *  @return The contents of the selection as a UTF-8 encoded string, or `NULL`
  *  if an [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED and @ref
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED and @ref
  *  GLFW_PLATFORM_ERROR.
  *
  *  @pointer_lifetime The returned string is allocated and freed by GLFW. You
@@ -418,7 +418,7 @@ GLFWAPI const char* glfwGetX11SelectionString(void);
  *  @return The `GLXContext` of the specified window, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -435,7 +435,7 @@ GLFWAPI GLXContext glfwGetGLXContext(GLFWwindow* window);
  *  @return The `GLXWindow` of the specified window, or `None` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -454,7 +454,7 @@ GLFWAPI GLXWindow glfwGetGLXWindow(GLFWwindow* window);
  *  @return The `struct wl_display*` used by GLFW, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -470,7 +470,7 @@ GLFWAPI struct wl_display* glfwGetWaylandDisplay(void);
  *  @return The `struct wl_output*` of the specified monitor, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -486,7 +486,7 @@ GLFWAPI struct wl_output* glfwGetWaylandMonitor(GLFWmonitor* monitor);
  *  @return The main `struct wl_surface*` of the specified window, or `NULL` if
  *  an [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
  *  synchronized.
@@ -504,7 +504,7 @@ GLFWAPI struct wl_surface* glfwGetWaylandWindow(GLFWwindow* window);
  *  @return The `EGLDisplay` used by GLFW, or `EGL_NO_DISPLAY` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED.
+ *  @errors Possible errors deps @ref GLFW_NOT_INITIALIZED.
  *
  *  @remark Because EGL is initialized on demand, this function will return
  *  `EGL_NO_DISPLAY` until the first context has been created via EGL.
@@ -523,7 +523,7 @@ GLFWAPI EGLDisplay glfwGetEGLDisplay(void);
  *  @return The `EGLContext` of the specified window, or `EGL_NO_CONTEXT` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -540,7 +540,7 @@ GLFWAPI EGLContext glfwGetEGLContext(GLFWwindow* window);
  *  @return The `EGLSurface` of the specified window, or `EGL_NO_SURFACE` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -566,7 +566,7 @@ GLFWAPI EGLSurface glfwGetEGLSurface(GLFWwindow* window);
  *  @return `GLFW_TRUE` if successful, or `GLFW_FALSE` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -590,7 +590,7 @@ GLFWAPI int glfwGetOSMesaColorBuffer(GLFWwindow* window, int* width, int* height
  *  @return `GLFW_TRUE` if successful, or `GLFW_FALSE` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not
@@ -607,7 +607,7 @@ GLFWAPI int glfwGetOSMesaDepthBuffer(GLFWwindow* window, int* width, int* height
  *  @return The `OSMesaContext` of the specified window, or `NULL` if an
  *  [error](@ref error_handling) occurred.
  *
- *  @errors Possible errors include @ref GLFW_NO_WINDOW_CONTEXT and @ref
+ *  @errors Possible errors deps @ref GLFW_NO_WINDOW_CONTEXT and @ref
  *  GLFW_NOT_INITIALIZED.
  *
  *  @thread_safety This function may be called from any thread.  Access is not

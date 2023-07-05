@@ -10,16 +10,16 @@ find_package(glfw3 REQUIRED)
 
 # Include directories
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS})
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "include")
-include_directories("./include/glad")
-include_directories("./include/KHR")
+include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "deps")
+include_directories("deps/glad")
+include_directories("deps/KHR")
 
 # Add source files
 set(SOURCES
-    src/main.cpp
-    src/glad.c
-    # Add more source files here if necessary
-)
+        src/main.cpp
+        src/glad.c
+        # Add more source files here if necessary
+        )
 
 # Add GLAD library
 add_library(glad src/glad.c)

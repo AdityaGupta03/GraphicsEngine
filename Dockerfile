@@ -51,7 +51,7 @@ RUN cmake . && make
 EXPOSE 8080
 
 # Build the project
-# RUN ./bin/make.sh
+# RUN ./bin/local-docker-make.sh
 
 # Set the entrypoint to run the compiled executable
 CMD [ "/usr/bin/firefox" ]
