@@ -3,6 +3,12 @@
 #include <cmath>
 #include <iostream>
 
+#ifdef __APPLE__
+    #define IS_APPLE_COMPUTER true
+#else
+    #define IS_APPLE_COMPUTER false
+#endif
+
 /*
  EXPLANATION OF HOW OPENGL RENDERS FRAMES:
 
@@ -57,7 +63,7 @@ int main() {
      * Fix of below error message:
      * [Error #65543] NSGL: The targeted version of macOS only supports forward-compatible core profile contexts for OpenGL 3.2 and above.
      */
-    if (__APPLE__)
+    if (IS_APPLE_COMPUTER)
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     glfwWindowHint(GLFW_OPENGL_PROFILE,
