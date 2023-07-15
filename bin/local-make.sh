@@ -10,6 +10,7 @@ mkdir build && cd build
 > cmake_log
 > make_log
 
+# Build Project
 read -p "Do you want to use manually set glfw3 path (in \"CMakeLists.txt\")? (y/n): " optional_cmake
 
 if [[ optional_cmake == "y" || optional_cmake == "Y" ]]; then
@@ -24,8 +25,6 @@ if [ $? -ne 0 ]; then
     echo
     exit
   fi
-
-# Build Project
 
 
 make &> make_log
