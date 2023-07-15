@@ -16,13 +16,15 @@ if [ $? -ne 0 ]; then
   echo
   echo "Failed to build with cmake. Check build log (\"cmake_log\")..."
   echo
+  exit
 fi
 
-make &> build_log
+make &> make_log
 if [ $? -ne 0 ]; then
   echo
   echo "Failed to build with make. Check build log (\"make_log\")..."
   echo
+  exit
 fi
 
 echo
