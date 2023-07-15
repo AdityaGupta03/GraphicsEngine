@@ -17,10 +17,10 @@ include_directories("includes")
 
 # Add source files
 set(SOURCES
-        src/main.cpp
+        src/frame.cpp
         src/glad.c
         # Add more source files here if necessary
-        )
+        includes/frame.h)
 
 # Add GLAD library
 add_library(glad src/glad.c)
