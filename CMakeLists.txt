@@ -13,6 +13,7 @@ include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "deps")
 include_directories("deps/glad")
 include_directories("deps/KHR")
+include_directories("includes")
 
 # Add source files
 set(SOURCES
