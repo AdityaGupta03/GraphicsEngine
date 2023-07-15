@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
 project(GraphicsEngine)
 
+option(ENABLE_OPTIONAL_COMMAND "Enable Optional Command" OFF)
+
+if (ENABLE_OPTIONAL_COMMAND)
+    set(glfw3_DIR "/path/to/directory/containing/config/file")
+endif ()
+
 # Set C++ version
 set(CMAKE_CXX_STANDARD 14)
 

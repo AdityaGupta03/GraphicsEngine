@@ -43,10 +43,18 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "}\n\0";
 
 static void error_callback(int err_code, const char *description) {
+
     fprintf(stderr, "[Error #%d] %s\n", err_code, description);
+
 }
 
-void startFrame() {
+static void frame_resize_callback(GLFWwindow *window, int width, int height) {
+
+    glViewport(0, 0, width, height);
+
+}
+
+void start_frame() {
 
     glfwSetErrorCallback(error_callback); // Forces glfw errors to execute callback function on failure
 
@@ -56,46 +64,21 @@ void startFrame() {
 
     /*An openGL profile is like a package of functions */
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                   // set major version to 3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,
-                   3);                   // set minor version to 3 .. this means we are using openGL 3.3
-    glfwWindowHint(GLFW_RESIZABLE, true);
+    set_window_hints();
 
-    /*
-     * Fix of below error message:
-     * [Error #65543] NSGL: The targeted version of macOS only supports forward-compatible core profile contexts for OpenGL 3.2 and above.
-     */
-    if (IS_APPLE_COMPUTER)
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    glfwWindowHint(GLFW_OPENGL_PROFILE,
-                   GLFW_OPENGL_CORE_PROFILE); // set profile to core profile, this means we only have the modern functions
-
-    GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", NULL,
-                                          NULL); // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
-
-    if (window == nullptr) // If the window failed to create then terminate the program
-    {
+    // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
+    GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", NULL, NULL);
+    if (window == nullptr) { // If the window failed to create then terminate the program
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwMakeContextCurrent(
-            window); // Make the window the current context .. context is a sort of object that holds the entirety of openGL
-    gladLoadGL();                    // Load all of the openGL functions
+            window); // Make the window the current context... Context is a sort of object that holds the entirety of openGL
+    gladLoadGL();                    // Load all the openGL functions
 
-    // Maximize size and set viewport
-    glfwMaximizeWindow(window);
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    if (height <= 0 || width <= 0) {
-        perror("Incorrectly retrieved height and width.");
-        exit(EXIT_FAILURE);
-    }
-    glViewport(0, 0, width,
-               height);        // Set the viewport to the size of the window, area of openGL that we want to render to .. goes from bottom left corner (0,0) to top right corner (800,800)
-
+    handle_window_resize(window);
 
     /* SHADERS AND FRAGMENT SHADERS SECTION: */
 
@@ -187,8 +170,41 @@ void startFrame() {
 
 }
 
+void set_window_hints() {
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                   // set major version to 3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,
+                   3);                   // set minor version to 3 .. this means we are using openGL 3.3
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+
+    /*
+     * Fix of below error message:
+     * [Error #65543] NSGL: The targeted version of macOS only supports forward-compatible core profile contexts for OpenGL 3.2 and above.
+     */
+    if (IS_APPLE_COMPUTER)
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    glfwWindowHint(GLFW_OPENGL_PROFILE,
+                   GLFW_OPENGL_CORE_PROFILE); // set profile to core profile, this means we only have the modern functions
+
+}
+
+void handle_window_resize(GLFWwindow *window) {
+
+    glfwSetFramebufferSizeCallback(window, frame_resize_callback);
+    glfwMaximizeWindow(window);
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    if (height <= 0 || width <= 0) {
+        perror("Incorrectly retrieved height and width.");
+        exit(EXIT_FAILURE);
+    }
+    glViewport(0, 0, width, height);
+
+}
+
 int main() {
 
-    startFrame();
+    start_frame();
 
 }
