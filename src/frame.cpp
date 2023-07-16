@@ -4,10 +4,12 @@
 #include <iostream>
 #include <frame.h>
 
+#include "vertex.h"
+
 #ifdef __APPLE__
-    #define IS_APPLE_COMPUTER true
+#define IS_APPLE_COMPUTER true
 #else
-    #define IS_APPLE_COMPUTER false
+#define IS_APPLE_COMPUTER false
 #endif
 
 /*
@@ -110,10 +112,16 @@ void start_frame() {
     /* END OF SHADERS AND FRAGMENT SECTION*/
 
     /* CREATE A TRIANGLE USING VERTICES*/
-    GLfloat vertices[] = {
-            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,  // bottom left
-            0.5f, -0.5f * float(sqrt(3) / 3), 0.0f,      // bottom right
-            0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f // top
+//    GLfloat vertices[] = {
+//            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,  // bottom left
+//            0.5f, -0.5f * float(sqrt(3) / 3), 0.0f,      // bottom right
+//            0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f // top
+//    };
+
+    Vertex vertices[] = {
+            Vertex(-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f),
+            Vertex(0.5f, -0.5f * float(sqrt(3) / 3), 0.0f),
+            Vertex(0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f)
     };
 
     GLuint VAO, VBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
