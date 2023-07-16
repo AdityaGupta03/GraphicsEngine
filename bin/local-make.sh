@@ -48,18 +48,18 @@ else
     fi
   else
     if [[ $1 == "tests" ]]; then
-          cmake --build . --target UnitTests &> cmake_log
-          if [ $? -ne 0 ]; then
-              echo -e "Failed to build with cmake. Check build log (\"cmake_log\")\n"
-              echo
-              exit
-            fi
-        else
-          echo "Invaild flags passed."
-          echo "Usage: local-make.sh [tests]"
-          echo
-          exit
-        fi
+      cmake --build . --target UnitTests &> cmake_log
+      if [ $? -ne 0 ]; then
+        echo -e "Failed to build with cmake. Check build log (\"cmake_log\")\n"
+        echo
+        exit
+      fi
+    else
+      echo "Invaild flags passed."
+      echo "Usage: local-make.sh [tests]"
+      echo
+      exit
+    fi
   fi
 fi
 
