@@ -27,7 +27,7 @@ set(SOURCES
         src/glad.c
         src/vertex.cpp
         # Add more source files here if necessary
-        includes/frame.h)
+        includes/frame.h includes/matrix.h src/matrix.cpp src/model.cpp includes/model.h)
 
 # Add GLAD library
 add_library(glad src/glad.c)

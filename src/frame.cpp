@@ -5,6 +5,7 @@
 #include <frame.h>
 
 #include "vertex.h"
+#include "model.h"
 
 #ifdef __APPLE__
 #define IS_APPLE_COMPUTER true
@@ -118,11 +119,15 @@ void start_frame() {
 //            0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f // top
 //    };
 
-    Vertex vertices[] = {
-            Vertex(-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f),
-            Vertex(0.5f, -0.5f * float(sqrt(3) / 3), 0.0f),
-            Vertex(0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f)
+    std::vector<Vertex> vertices{
+            Vertex(-1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f),
+            Vertex(-1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f),
+            Vertex(1.0f, -1.0f * float(sqrt(3) / 3), 0.0f),
+            Vertex(1.0f, 1.0f * float(sqrt(3) / 3), 0.0f)
     };
+
+    std::vector<Matrix> matrices{Matrix(0, 1, 2), Matrix(0, 2, 3)};
+    Model model = Model(matrices, vertices);
 
     GLuint VAO, VBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
 
@@ -137,7 +142,7 @@ void start_frame() {
     And whenever we have a function that modifies that type of object,
     it will modify the object that is currently bound */
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * model.vertices.size(), model.vertices.data(),
                  GL_STATIC_DRAW); // glBufferData(type of buffer, size of data, data, usage)
     /* Types of usage for buffer data:
     Static: data will not be changed
@@ -149,10 +154,10 @@ void start_frame() {
     _Copy: data will be copied from one buffer to another
     */
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                          (void *) 0); // glVertexAttribPointer(index of vertex attribute, size, type, normalized, amount of data so just length of each float multiplied by 3, pointer)
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                          nullptr); // glVertexAttribPointer(index of vertex attribute, size, type, normalized, amount of data so just length of each float multiplied by 3, pointer)
     glEnableVertexAttribArray(
-            0);                                                   // Enable the vertex attribute at index 0 because that is the position of our vertex attribute
+            0); // Enable the vertex attribute at index 0 because that is the position of our vertex attribute
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind the vertex buffer object
     glBindVertexArray(0);              // Unbind the vertex array object
@@ -164,7 +169,7 @@ void start_frame() {
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
         glUseProgram(shaderProgram);             // Use the shader program that we created earlier
         glBindVertexArray(VAO);                     // Bind the vertex array object
-        glDrawArrays(GL_TRIANGLES, 0, 3);         // Draw the triangle
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, model.vertices.size());         // Draw the triangle
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
