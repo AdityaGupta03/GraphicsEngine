@@ -20,6 +20,6 @@ void print_test_result(string test_name, bool pass) {
     if (pass)
         cout << "\033[1;32m" << "Passed " << test_name << ".\033[0m" << endl;
     else
-        cout << "\"\\033[1;31m" << "Failed " << test_name << ".\\033[0m" << endl;
+        cout << "\033[1;31m" << "Failed " << test_name << ".\033[0m" << endl;
 
 }
