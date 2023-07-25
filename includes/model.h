@@ -10,6 +10,8 @@ public:
     std::vector<Vertex> vertices;
 
     Model(std::vector<Matrix> faces, std::vector<Vertex> vertices);
+
+    std::vector<int> getAllIndices();
 };
 
 #endif

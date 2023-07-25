@@ -5,7 +5,7 @@
 
 class Matrix {
 public:
-    int indices[];
+    int indices[3];
 
     Matrix(int v1, int v2, int v3);
 

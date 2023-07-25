@@ -68,108 +68,83 @@ void start_frame() {
     /*An openGL profile is like a package of functions */
 
     set_window_hints();
-
-    // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
-    GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", NULL, NULL);
-    if (window == nullptr) { // If the window failed to create then terminate the program
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-
-    glfwMakeContextCurrent(
-            window); // Make the window the current context... Context is a sort of object that holds the entirety of openGL
-    gladLoadGL();                    // Load all the openGL functions
-
-    handle_window_resize(window);
-
-    /* SHADERS AND FRAGMENT SHADERS SECTION: */
-
-    // Create the vertex shader
-    GLuint vertexShader = glCreateShader(
-            GL_VERTEX_SHADER);        // Create a vertex shader, specify what kind of shader we want, in this case a vertex shader
-    glShaderSource(vertexShader, 1, &vertexShaderSource,
-                   NULL); // Point the shader source to the vertexShaderSource variable
-    glCompileShader(
-            vertexShader);                                // Compile the shader and give it the reference value of vertexShader
-
-    // Create the fragment shader
-    GLuint fragmentShader = glCreateShader(
-            GL_FRAGMENT_SHADER);        // Create a fragment shader, specify what kind of shader we want, in this case a fragment shader
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource,
-                   NULL); // Point the shader source to the fragmentShaderSource variable
-    glCompileShader(
-            fragmentShader);                                // Compile the shader and give it the reference value of fragmentShader
-
-    // Create the shader program
-    GLuint shaderProgram = glCreateProgram();       // Create a shader program, this is what we will use to link the vertex and fragment shaders together
-    glAttachShader(shaderProgram, vertexShader);   // Attach the vertex shader to the shader program
-    glAttachShader(shaderProgram, fragmentShader); // Attach the fragment shader to the shader program
-    glLinkProgram(shaderProgram);                   // Link the shader program
-
-    glDeleteShader(vertexShader);    // Delete the vertex shader to free up memory
-    glDeleteShader(fragmentShader); // Delete the fragment shader to free up memory
-
-    /* END OF SHADERS AND FRAGMENT SECTION*/
-
-    /* CREATE A TRIANGLE USING VERTICES*/
-//    GLfloat vertices[] = {
-//            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,  // bottom left
-//            0.5f, -0.5f * float(sqrt(3) / 3), 0.0f,      // bottom right
-//            0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f // top
-//    };
+    GLFWwindow *window = create_window();
+    GLuint shaderProgram = set_shaders();
 
     std::vector<Vertex> vertices{
-            Vertex(-1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f),
             Vertex(-1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f),
+            Vertex(-1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f),
             Vertex(1.0f, -1.0f * float(sqrt(3) / 3), 0.0f),
             Vertex(1.0f, 1.0f * float(sqrt(3) / 3), 0.0f)
     };
 
-    std::vector<Matrix> matrices{Matrix(0, 1, 2), Matrix(0, 2, 3)};
+    std::vector<Matrix> matrices{
+            Matrix(0, 1, 2),
+            Matrix(0, 2, 3)
+    };
+
     Model model = Model(matrices, vertices);
+    auto indices = model.getAllIndices();
 
-    GLuint VAO, VBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
+    GLuint VAO, VBO, EBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
 
-    glGenVertexArrays(1,
-                      &VAO); // Generate a vertex array object with 1 because we only have one 3d object, give it the reference value of VAO .. ORDER MATTERS HERE GENERATE VAO BEFORE VBO
-    glGenBuffers(1,
-                 &VBO);        // Generate a vertex buffer object with 1 because we only have one 3d object, give it the reference value of VBO
-    glBindVertexArray(VAO);        // Bind the vertex array object to the current context
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    /* Binding is like making a certain object into the current object.
-    And whenever we have a function that modifies that type of object,
-    it will modify the object that is currently bound */
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * model.vertices.size(), model.vertices.data(), GL_STATIC_DRAW);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * model.vertices.size(), model.vertices.data(),
-                 GL_STATIC_DRAW); // glBufferData(type of buffer, size of data, data, usage)
-    /* Types of usage for buffer data:
-    Static: data will not be changed
-    Dynamic: data will be changed frequently
-    Stream: data will be changed every frame\
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), GL_STATIC_DRAW);
 
-    _Draw: data will be sent to the GPU
-    _Read: data will be read from the GPU
-    _Copy: data will be copied from one buffer to another
-    */
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+    glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                          nullptr); // glVertexAttribPointer(index of vertex attribute, size, type, normalized, amount of data so just length of each float multiplied by 3, pointer)
-    glEnableVertexAttribArray(
-            0); // Enable the vertex attribute at index 0 because that is the position of our vertex attribute
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind the vertex buffer object
-    glBindVertexArray(0);              // Unbind the vertex array object
+//
+//    glGenVertexArrays(1,&VAO);
+//    // Generate a vertex buffer object with 1 because we only have one 3d object, give it the reference value of VBO
+//    glGenBuffers(1,&VBO);
+//    // Bind the vertex array object to the current context
+//    glGenBuffers(1, &EBO);
+//    glBindVertexArray(VAO);
+//
+//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//    /* Binding is like making a certain object into the current object.
+//    And whenever we have a function that modifies that type of object,
+//    it will modify the object that is currently bound */
+//
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * model.vertices.size(), model.vertices.data(),
+//                 GL_STATIC_DRAW); // glBufferData(type of buffer, size of data, data, usage)
+//    /* Types of usage for buffer data:
+//    Static: data will not be changed
+//    Dynamic: data will be changed frequently
+//    Stream: data will be changed every frame\
+//
+//    _Draw: data will be sent to the GPU
+//    _Read: data will be read from the GPU
+//    _Copy: data will be copied from one buffer to another
+//    */
+//
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+//                          nullptr); // glVertexAttribPointer(index of vertex attribute, size, type, normalized, amount of data so just length of each float multiplied by 3, pointer)
+//    glEnableVertexAttribArray(
+//            0); // Enable the vertex attribute at index 0 because that is the position of our vertex attribute
+//
+//    glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind the vertex buffer object
+//    glBindVertexArray(0);              // Unbind the vertex array object
 
-    while (!glfwWindowShouldClose(window)) // While the window is not closed
-    {
+    while (!glfwWindowShouldClose(window)) { // While the window is not closed
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
         glUseProgram(shaderProgram);             // Use the shader program that we created earlier
         glBindVertexArray(VAO);                     // Bind the vertex array object
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, model.vertices.size());         // Draw the triangle
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
@@ -177,7 +152,6 @@ void start_frame() {
 
     glfwMakeContextCurrent(
             window); // Make the window the current context .. context is a sort of object that holds the entirety of openGL
-
     glfwDestroyWindow(window); // Destroy the window
     glfwTerminate();           // Terminate glfw
 
@@ -185,9 +159,8 @@ void start_frame() {
 
 void set_window_hints() {
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                   // set major version to 3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,
-                   3);                   // set minor version to 3 .. this means we are using openGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // set major version to 3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // set minor version to 3 .. this means we are using openGL 3.3
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
     /*
@@ -202,17 +175,55 @@ void set_window_hints() {
 
 }
 
-void handle_window_resize(GLFWwindow *window) {
+GLFWwindow *create_window() {
 
-    glfwSetFramebufferSizeCallback(window, frame_resize_callback);
-    glfwMaximizeWindow(window);
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    if (height <= 0 || width <= 0) {
-        perror("Incorrectly retrieved height and width.");
+    // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
+    GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", nullptr, nullptr);
+    if (window == nullptr) {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
         exit(EXIT_FAILURE);
     }
-    glViewport(0, 0, width, height);
+
+    glfwMakeContextCurrent(
+            window); // Make the window the current context... Context is a sort of object that holds the entirety of openGL
+    gladLoadGL(); // Load all the openGL functions
+
+    // Set resize callback and start window at max screen size
+    glfwSetFramebufferSizeCallback(window, frame_resize_callback);
+    glfwMaximizeWindow(window);
+
+    return window;
+
+}
+
+GLuint set_shaders() {
+
+    GLuint vertexShader = glCreateShader(
+            GL_VERTEX_SHADER);        // Create a vertex shader, specify what kind of shader we want, in this case a vertex shader
+    glShaderSource(vertexShader, 1, &vertexShaderSource,
+                   nullptr); // Point the shader source to the vertexShaderSource variable
+    glCompileShader(
+            vertexShader);                                // Compile the shader and give it the reference value of vertexShader
+
+    // Create the fragment shader
+    GLuint fragmentShader = glCreateShader(
+            GL_FRAGMENT_SHADER);        // Create a fragment shader, specify what kind of shader we want, in this case a fragment shader
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource,
+                   nullptr); // Point the shader source to the fragmentShaderSource variable
+    glCompileShader(
+            fragmentShader);                                // Compile the shader and give it the reference value of fragmentShader
+
+    // Create the shader program
+    GLuint shaderProgram = glCreateProgram();       // Create a shader program, this is what we will use to link the vertex and fragment shaders together
+    glAttachShader(shaderProgram, vertexShader);   // Attach the vertex shader to the shader program
+    glAttachShader(shaderProgram, fragmentShader); // Attach the fragment shader to the shader program
+    glLinkProgram(shaderProgram);                   // Link the shader program
+
+    glDeleteShader(vertexShader);    // Delete the vertex shader to free up memory
+    glDeleteShader(fragmentShader); // Delete the fragment shader to free up memory
+
+    return shaderProgram;
 
 }
 

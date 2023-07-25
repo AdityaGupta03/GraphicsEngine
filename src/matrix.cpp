@@ -10,7 +10,7 @@ Matrix::Matrix(int v1, int v2, int v3) {
 
 int Matrix::operator[](int i) noexcept(false) {
 
-    if (i >= 0 && i <= 3)
+    if (i >= 0 && i <= 2)
         return this->indices[i];
     else
         throw std::runtime_error("Invalid vertex index.");

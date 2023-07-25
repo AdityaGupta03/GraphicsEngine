@@ -9,7 +9,9 @@ void start_frame();
 
 void set_window_hints();
 
-void handle_window_resize(GLFWwindow *window);
+GLFWwindow *create_window();
+
+GLuint set_shaders();
 
 int main();
 
