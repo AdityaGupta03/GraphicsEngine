@@ -13,22 +13,7 @@
 #define IS_APPLE_COMPUTER false
 #endif
 
-/*
- EXPLANATION OF HOW OPENGL RENDERS FRAMES:
 
- Each Frame is rendered from left to right, top to bottom, pixel by pixel
-
- Frame Buffer: A buffer that stores the color values for each pixel
-
- How the code works is that there is a "Front Buffer" and a "Back Buffer"
- The front buffer is the buffer that is currently being displayed on the screen
- The back buffer is the buffer that is being drawn to
-
- When the back buffer is done being drawn to, it is swapped with the front buffer
-
-*/
-
-/* OpenGL does not provide default shaders so I just ripped these off of the internet */
 
 // Vertex Shader source code
 const char *vertexShaderSource = "#version 330 core\n"
@@ -59,14 +44,13 @@ static void frame_resize_callback(GLFWwindow *window, int width, int height) {
 
 void start_frame() {
 
-    glfwSetErrorCallback(error_callback); // Forces glfw errors to execute callback function on failure
+    glfwSetErrorCallback(error_callback); 
 
     if (!glfwInit()) { // initialize glfw
         exit(EXIT_FAILURE);
     }
 
     /*An openGL profile is like a package of functions */
-
     set_window_hints();
     GLFWwindow *window = create_window();
     GLuint shaderProgram = set_shaders();
@@ -104,39 +88,6 @@ void start_frame() {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-//
-//    glGenVertexArrays(1,&VAO);
-//    // Generate a vertex buffer object with 1 because we only have one 3d object, give it the reference value of VBO
-//    glGenBuffers(1,&VBO);
-//    // Bind the vertex array object to the current context
-//    glGenBuffers(1, &EBO);
-//    glBindVertexArray(VAO);
-//
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//    /* Binding is like making a certain object into the current object.
-//    And whenever we have a function that modifies that type of object,
-//    it will modify the object that is currently bound */
-//
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * model.vertices.size(), model.vertices.data(),
-//                 GL_STATIC_DRAW); // glBufferData(type of buffer, size of data, data, usage)
-//    /* Types of usage for buffer data:
-//    Static: data will not be changed
-//    Dynamic: data will be changed frequently
-//    Stream: data will be changed every frame\
-//
-//    _Draw: data will be sent to the GPU
-//    _Read: data will be read from the GPU
-//    _Copy: data will be copied from one buffer to another
-//    */
-//
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-//                          nullptr); // glVertexAttribPointer(index of vertex attribute, size, type, normalized, amount of data so just length of each float multiplied by 3, pointer)
-//    glEnableVertexAttribArray(
-//            0); // Enable the vertex attribute at index 0 because that is the position of our vertex attribute
-//
-//    glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind the vertex buffer object
-//    glBindVertexArray(0);              // Unbind the vertex array object
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
         glClearColor(0.07f, 0.13f, 0.17f,
