@@ -20,6 +20,7 @@ include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "deps")
 include_directories("deps/glad")
 include_directories("deps/KHR")
 include_directories("includes")
+include_directories("shaders")
 
 # Add source files for main application
 set(SOURCES
@@ -27,8 +28,19 @@ set(SOURCES
         src/glad.c
         src/vertex.cpp
         src/VBO.cpp
+        src/EBO.cpp
+        src/VAO.cpp
+        src/shader.cpp
         # Add more source files here if necessary
-        includes/frame.h includes/matrix.h src/matrix.cpp src/model.cpp includes/model.h includes/VBO.h)
+        includes/frame.h 
+        includes/matrix.h 
+        src/matrix.cpp 
+        src/model.cpp 
+        includes/model.h 
+        includes/VBO.h
+        includes/EBO.h
+        includes/VAO.h
+        includes/shader.h)
 
 # Add GLAD library
 add_library(glad src/glad.c)

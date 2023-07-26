@@ -6,6 +6,10 @@
 
 #include "vertex.h"
 #include "model.h"
+#include "shader.h"
+#include "VBO.h"
+#include "VAO.h"
+#include "EBO.h"
 
 #ifdef __APPLE__
 #define IS_APPLE_COMPUTER true
@@ -36,52 +40,47 @@ void start_frame() {
 
     /*An openGL profile is like a package of functions */
     set_window_hints();
+
     GLFWwindow *window = create_window();
-    GLuint shaderProgram = set_shaders();
 
-    std::vector<Vertex> vertices{
-            Vertex(-1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f),
-            Vertex(-1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f),
-            Vertex(1.0f, -1.0f * float(sqrt(3) / 3), 0.0f),
-            Vertex(1.0f, 1.0f * float(sqrt(3) / 3), 0.0f)
+    GLfloat vertices[] = {
+            -1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f,
+            -1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f, 
+            1.0f, -1.0f * float(sqrt(3) / 3), 0.0f,
+            1.0f, 1.0f * float(sqrt(3) / 3), 0.0f
     };
 
-    std::vector<Matrix> matrices{
-            Matrix(0, 1, 2),
-            Matrix(0, 2, 3)
+    GLuint indices[] = {
+            0, 1, 2,
+            1, 2, 3
     };
 
-    Model model = Model(matrices, vertices);
-    auto indices = model.getAllIndices();
+    Shader shaderProgram = Shader("default.vert", "default.frag");
 
-    GLuint VAO, VBO, EBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
+    VAO VAO1;
+    VAO1.Bind();
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
+    VBO VBO1(vertices, sizeof(vertices));
+    std::cout << sizeof(vertices) << std::endl;
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * model.vertices.size(), model.vertices.data(), GL_STATIC_DRAW);
+    // Generates the EBO and binds it
+    EBO EBO1(indices, sizeof(indices));
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), GL_STATIC_DRAW);
+    VAO1.LinkVBO(VBO1, 0, 1);
+    VAO1.Unbind();
+    VBO1.Unbind();
+    EBO1.Unbind();
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
 
-    // ADD SHADER HERE
+        shaderProgram.Activate();
 
-        glBindVertexArray(VAO);                     // Bind the vertex array object
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        VAO1.Bind(); // Bind the vertex array object
+        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
