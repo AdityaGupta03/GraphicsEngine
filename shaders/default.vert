@@ -1,4 +1,3 @@
-// Vertex Shader source code
 "#version 330 core\n"
 layout (location = 0) in vec3 aPos;
 void main()

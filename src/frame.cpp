@@ -70,16 +70,15 @@ void start_frame() {
 
     VAO1.LinkVBO(VBO1, 0, 3);
 
-    // VAO1.Unbind();
+    VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
-
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
-
+    
         shaderProgram.Activate();
 
         VAO1.Bind(); // Bind the vertex array object
