@@ -14,22 +14,6 @@
 #endif
 
 
-
-// Vertex Shader source code
-const char *vertexShaderSource = "#version 330 core\n"
-								 "layout (location = 0) in vec3 aPos;\n"
-								 "void main()\n"
-								 "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                 "}\0";
-// Fragment Shader source code
-const char *fragmentShaderSource = "#version 330 core\n"
-                                   "out vec4 FragColor;\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
-                                   "}\n\0";
-
 static void error_callback(int err_code, const char *description) {
 
     fprintf(stderr, "[Error #%d] %s\n", err_code, description);
@@ -93,7 +77,9 @@ void start_frame() {
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
-        glUseProgram(shaderProgram);             // Use the shader program that we created earlier
+
+    // ADD SHADER HERE
+
         glBindVertexArray(VAO);                     // Bind the vertex array object
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
@@ -145,36 +131,6 @@ GLFWwindow *create_window() {
     glfwMaximizeWindow(window);
 
     return window;
-
-}
-
-GLuint set_shaders() {
-
-    GLuint vertexShader = glCreateShader(
-            GL_VERTEX_SHADER);        // Create a vertex shader, specify what kind of shader we want, in this case a vertex shader
-    glShaderSource(vertexShader, 1, &vertexShaderSource,
-                   nullptr); // Point the shader source to the vertexShaderSource variable
-    glCompileShader(
-            vertexShader);                                // Compile the shader and give it the reference value of vertexShader
-
-    // Create the fragment shader
-    GLuint fragmentShader = glCreateShader(
-            GL_FRAGMENT_SHADER);        // Create a fragment shader, specify what kind of shader we want, in this case a fragment shader
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource,
-                   nullptr); // Point the shader source to the fragmentShaderSource variable
-    glCompileShader(
-            fragmentShader);                                // Compile the shader and give it the reference value of fragmentShader
-
-    // Create the shader program
-    GLuint shaderProgram = glCreateProgram();       // Create a shader program, this is what we will use to link the vertex and fragment shaders together
-    glAttachShader(shaderProgram, vertexShader);   // Attach the vertex shader to the shader program
-    glAttachShader(shaderProgram, fragmentShader); // Attach the fragment shader to the shader program
-    glLinkProgram(shaderProgram);                   // Link the shader program
-
-    glDeleteShader(vertexShader);    // Delete the vertex shader to free up memory
-    glDeleteShader(fragmentShader); // Delete the fragment shader to free up memory
-
-    return shaderProgram;
 
 }
 
