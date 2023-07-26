@@ -32,6 +32,9 @@ static void frame_resize_callback(GLFWwindow *window, int width, int height) {
 
 void start_frame() {
 
+    std::string vertexShaderPath = "../shaders/default.vert";
+    std::string fragmentShaderPath = "../shaders/default.frag";
+
     glfwSetErrorCallback(error_callback); 
 
     if (!glfwInit()) { // initialize glfw
@@ -55,19 +58,19 @@ void start_frame() {
             1, 2, 3
     };
 
-    Shader shaderProgram = Shader("default.vert", "default.frag");
+    Shader shaderProgram = Shader("../shaders/default.vert", "../shaders/default.frag");
 
     VAO VAO1;
     VAO1.Bind();
 
     VBO VBO1(vertices, sizeof(vertices));
-    std::cout << sizeof(vertices) << std::endl;
 
     // Generates the EBO and binds it
     EBO EBO1(indices, sizeof(indices));
 
-    VAO1.LinkVBO(VBO1, 0, 1);
-    VAO1.Unbind();
+    VAO1.LinkVBO(VBO1, 0, 3);
+
+    // VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
 
@@ -80,11 +83,15 @@ void start_frame() {
         shaderProgram.Activate();
 
         VAO1.Bind(); // Bind the vertex array object
-        glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, 0);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
     }
+    VAO1.Delete();
+    VBO1.Delete();
+    EBO1.Delete();
 
     glfwMakeContextCurrent(
             window); // Make the window the current context .. context is a sort of object that holds the entirety of openGL

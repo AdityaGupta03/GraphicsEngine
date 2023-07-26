@@ -2,6 +2,7 @@
 #define VBO_H
 
 #include<glad/glad.h>
+#include<iostream>
 
 class VBO
 {
