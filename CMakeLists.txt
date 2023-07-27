@@ -55,6 +55,9 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw ${CMAKE_DL_LIBS})
 add_executable(UnitTests
         tests/src/master_test.cpp
         tests/src/vertex_tests.cpp
+        tests/src/shader_tests.cpp
+        tests/includes/shader_tests.h
+        tests/includes/shader_tests.h
         src/vertex.cpp)
 
 # Include directories for unit tests

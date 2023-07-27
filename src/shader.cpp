@@ -12,6 +12,7 @@ std::string get_file_contents(const char* filename){
         return contents;
     }
     std::cout << "\033[1;31m" << "Failed to read file: " << filename << ".\033[0m" << std::endl;
+    return "Failed to read file";
 }
 
 Shader::Shader(const char* vertexFile, const char* fragmentFile){
