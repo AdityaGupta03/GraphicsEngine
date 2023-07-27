@@ -1,5 +1,6 @@
 #include <iostream>
 #include "vertex_tests.h"
+#include "shader_tests.h"
 
 using namespace std;
 
@@ -10,7 +11,8 @@ int main() {
     cout << "Running unit tests...\n" << endl;
 
     print_test_result("run_vertex_tests()", (run_vertex_tests() != -1));
-
+    print_test_result("run_shader_tests()", (run_shader_tests() != -1));
+    
     cout << endl;
 
 }
