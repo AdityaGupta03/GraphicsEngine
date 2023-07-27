@@ -47,10 +47,12 @@ void start_frame() {
     GLFWwindow *window = create_window();
 
     GLfloat vertices[] = {
-            -1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f,
-            -1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f, 
-            1.0f, -1.0f * float(sqrt(3) / 3), 0.0f,
-            1.0f, 1.0f * float(sqrt(3) / 3), 0.0f
+
+    //      Position                                    Color
+            -1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f,    1.0f, 0.0f, 0.0f,
+            -1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f,     0.0f, 1.0f, 0.0f,
+            1.0f, -1.0f * float(sqrt(3) / 3), 0.0f,     0.0f, 0.0f, 1.0f,
+            1.0f, 1.0f * float(sqrt(3) / 3), 0.0f,      1.0f, 1.0f, 0.0f,
     };
 
     GLuint indices[] = {
