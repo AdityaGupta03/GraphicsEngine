@@ -4,11 +4,11 @@
 
 bool file_reader_fail = false;
 bool shader_class_fail = false;
-std::string testNames[] = {"file reader", "shader class"};
+std::string ShaderTestNames[] = {"file reader", "shader class"};
 
-int fail_output(){
+void fail_output_shader_tests(){
     bool testStates[] = {file_reader_fail, shader_class_fail};
-    printFailedTests(testStates, testNames, 2);
+    printFailedTests(testStates, ShaderTestNames, 2);
 }
                         
 int run_shader_tests() {

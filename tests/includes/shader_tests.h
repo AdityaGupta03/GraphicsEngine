@@ -11,6 +11,6 @@ int run_shader_tests();
 int test_file_reader();
 int test_shader_class();
 
-int fail_output();
+void fail_output_shader_tests();
 
 #endif  // SHADER_TESTS_H
