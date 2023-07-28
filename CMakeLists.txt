@@ -15,10 +15,6 @@ if (ENABLE_OPTIONAL_COMMAND)
     set(glfw3_DIR "/path/to/directory/containing/config/file")
 endif ()
 
-# Dynamically add source files
-set(SOURCE_DIR "src")
-file(GLOB CPP_SOURCES "${SOURCE_DIR}/*.cpp")
-
 # Include directories
 include_directories(
         ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS}
@@ -28,11 +24,12 @@ include_directories(
         "includes"
 )
 
+# Dynamically add source files
+set(SOURCE_DIR "src")
+file(GLOB CPP_SOURCES "${SOURCE_DIR}/*.cpp")
+
 # Create executable for main application
 add_executable(${PROJECT_NAME} ${CPP_SOURCES} "src/glad.c")
-
-# Link libraries for main application
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw ${CMAKE_DL_LIBS})
 
 # Set test sources
 set(TEST_SOURCE_DIR "tests/src")
@@ -47,5 +44,6 @@ add_executable(UnitTests
 # Include directories for unit tests
 target_include_directories(UnitTests PRIVATE "tests/includes")
 
-# Link libraries for unit tests
+# Link libraries
 target_link_libraries(UnitTests ${OPENGL_LIBRARIES} glfw ${CMAKE_DL_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw ${CMAKE_DL_LIBS})
