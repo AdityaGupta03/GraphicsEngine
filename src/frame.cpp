@@ -82,8 +82,7 @@ void start_frame() {
             Matrix(0, 1, 2),
             Matrix(0, 2, 3)
     };
-
-    Model model = Model(matrices, vertices);
+    Model model = Model("../objFiles/teapot2.obj");
     auto indices = model.getAllIndices();
 
     GLuint VAO, VBO, EBO; // Create a vertex buffer object, also VAO is a vertex array object which gives pointers to multiple VBOs and how to interpret them.. allows for quick switching between VBOS
@@ -144,7 +143,8 @@ void start_frame() {
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
         glUseProgram(shaderProgram);             // Use the shader program that we created earlier
         glBindVertexArray(VAO);                     // Bind the vertex array object
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+//        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_LINES, 6320 * 3, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
