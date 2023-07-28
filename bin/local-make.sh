@@ -34,7 +34,7 @@ if [[ $first_time == true ]]; then
 
   make &> make_log
   if [ $? -ne 0 ]; then
-    echo -e "Failed to build with cmake. Check build log (\"make_log\")\n"
+    echo -e "Failed to build with make. Check build log (\"make_log\")\n"
     echo
     exit
   fi
