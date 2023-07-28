@@ -58,9 +58,15 @@ add_executable(UnitTests
         tests/src/shader_tests.cpp
         tests/includes/shader_tests.h
         tests/includes/shader_tests.h
-        src/vertex.cpp)
+        src/shader.cpp
+        src/vertex.cpp
+        src/glad.c
+        shaders/default.vert
+        shaders/default.frag
+)
 
 # Include directories for unit tests
+target_include_directories(UnitTests PRIVATE "includes")
 target_include_directories(UnitTests PRIVATE "tests/includes")
 
 # Link libraries for unit tests

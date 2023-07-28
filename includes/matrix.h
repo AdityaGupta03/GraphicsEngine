@@ -10,7 +10,6 @@ public:
     Matrix(int v1, int v2, int v3);
 
     int operator[](int i) noexcept(false); // Throws std::runtime_error
-    int *Matrix::Cube(int *vertices);
 };
 
 #endif
