@@ -13,8 +13,8 @@ int run_shader_tests() {
 }
 
 int test_file_reader() {
-    const char* defaultVertex = "../../shaders/default.frag";
-    const char* defaultFragment = "../../shaders/default.frag";
+    const char* defaultVertex = "../shaders/default.frag";
+    const char* defaultFragment = "../shaders/default.frag";
     const char* defaultFail = "...";
 
     // Call the function to get the file contents
