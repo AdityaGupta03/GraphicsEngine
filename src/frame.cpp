@@ -18,6 +18,7 @@
 #endif
 
 
+
 static void error_callback(int err_code, const char *description) {
 
     fprintf(stderr, "[Error #%d] %s\n", err_code, description);
@@ -49,10 +50,10 @@ void start_frame() {
     GLfloat vertices[] = {
 
     //      Position                                    Color
-            -1.0f, -1.0f * float(sqrt(3)) / 3, 0.0f,    1.0f, 0.0f, 0.0f,
-            -1.0f, 1.0f * float(sqrt(3)) / 3, 0.0f,     0.0f, 1.0f, 0.0f,
-            1.0f, -1.0f * float(sqrt(3) / 3), 0.0f,     0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f * float(sqrt(3) / 3), 0.0f,      1.0f, 1.0f, 0.0f,
+            -0.9f, -1.0f * float(sqrt(3)) / 3, 0.0f,    // 1.0f, 0.0f, 0.0f,
+            -0.9f, 1.0f * float(sqrt(3)) / 3, 0.0f,     // 0.0f, 1.0f, 0.0f,
+            0.9f, -1.0f * float(sqrt(3) / 3), 0.0f,     // 0.0f, 0.0f, 1.0f,
+            0.9f, 1.0f * float(sqrt(3) / 3), 0.0f,      //1.0f, 1.0f, 0.0f,
     };
 
     GLuint indices[] = {
@@ -85,7 +86,8 @@ void start_frame() {
 
         VAO1.Bind(); // Bind the vertex array object
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
