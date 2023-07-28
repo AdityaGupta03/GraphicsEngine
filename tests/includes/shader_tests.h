@@ -1,6 +1,9 @@
 #ifndef SHADER_TESTS_H
 #define SHADER_TESTS_H
 #include "vertex.h"
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 // Function declaration
 int run_shader_tests();

@@ -56,8 +56,10 @@ add_executable(UnitTests
         tests/src/master_test.cpp
         tests/src/vertex_tests.cpp
         tests/src/shader_tests.cpp
+        tests/src/utils.cpp
         tests/includes/shader_tests.h
         tests/includes/shader_tests.h
+        tests/includes/utils.h
         src/shader.cpp
         src/vertex.cpp
         src/glad.c
