@@ -4,6 +4,12 @@
 
 bool file_reader_fail = false;
 bool shader_class_fail = false;
+std::string testNames[] = {"file reader", "shader class"};
+
+int fail_output(){
+    bool testStates[] = {file_reader_fail, shader_class_fail};
+    printFailedTests(testStates, testNames, 2);
+}
                         
 int run_shader_tests() {
     test_file_reader();     // You need to run all the test cases first, this is so that 
@@ -27,7 +33,7 @@ int test_file_reader() {
     std::string failContents = get_file_contents(defaultFail);
     std::cout.clear();
 
-    if (ShaderContents == "Failed to read file" || FragmentContents == "Failed to read file" || failContents == "Failed to read file"){
+    if (ShaderContents == "Failed to read file" || FragmentContents == "Failed to read file" || failContents != "Failed to read file"){
         file_reader_fail = true;
         return -1;
     }
@@ -35,28 +41,11 @@ int test_file_reader() {
 }
 
 int test_shader_class(){ // unfinished but set to fail right now
-    bool set_to_fail = true;
+    bool set_to_fail = false;
 
     if (set_to_fail == true){
         shader_class_fail = true;
         return -1;
-    }
-    return 0;
-}
-
-int fail_output(){
-    bool testStates[] = {file_reader_fail, shader_class_fail};
-    std::string testNames[] = {"file reader", "shader class"};
-
-    std::vector<int> failedTests = getFalseIndexes(testStates, sizeof(testStates)/sizeof(testStates[0]));
-
-    for(int i = 0; i < failedTests.size(); i++){
-        if (i == (failedTests.size() - 1)){
-            std::cout << "\033[1;31m" << "  └── Test Case Failed: " << testNames[i] << ".\033[0m" << std::endl;
-        }
-        else{
-            std::cout << "\033[1;31m" << "  ├── Test Case Failed: " << testNames[i] << ".\033[0m" << std::endl;
-        }
     }
     return 0;
 }
