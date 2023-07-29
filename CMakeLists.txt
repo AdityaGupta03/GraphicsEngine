@@ -20,14 +20,27 @@ include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} "deps")
 include_directories("deps/glad")
 include_directories("deps/KHR")
 include_directories("includes")
+include_directories("shaders")
 
 # Add source files for main application
 set(SOURCES
         src/frame.cpp
         src/glad.c
         src/vertex.cpp
+        src/VBO.cpp
+        src/EBO.cpp
+        src/VAO.cpp
+        src/shader.cpp
         # Add more source files here if necessary
-        includes/frame.h includes/matrix.h src/matrix.cpp src/model.cpp includes/model.h)
+        includes/frame.h 
+        includes/matrix.h 
+        src/matrix.cpp 
+        src/model.cpp 
+        includes/model.h 
+        includes/VBO.h
+        includes/EBO.h
+        includes/VAO.h
+        includes/shader.h)
 
 # Add GLAD library
 add_library(glad src/glad.c)
@@ -42,9 +55,20 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw ${CMAKE_DL_LIBS})
 add_executable(UnitTests
         tests/src/master_test.cpp
         tests/src/vertex_tests.cpp
-        src/vertex.cpp)
+        tests/src/shader_tests.cpp
+        tests/src/utils.cpp
+        tests/includes/shader_tests.h
+        tests/includes/shader_tests.h
+        tests/includes/utils.h
+        src/shader.cpp
+        src/vertex.cpp
+        src/glad.c
+        shaders/default.vert
+        shaders/default.frag
+)
 
 # Include directories for unit tests
+target_include_directories(UnitTests PRIVATE "includes")
 target_include_directories(UnitTests PRIVATE "tests/includes")
 
 # Link libraries for unit tests
