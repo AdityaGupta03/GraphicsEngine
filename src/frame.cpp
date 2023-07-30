@@ -46,11 +46,11 @@ void start_frame() {
 
     GLfloat vertices[] = {
 
-    //      Position                                    Color
-            -0.9f,  -0.9f,  0.0f,     1.0f, 0.0f, 0.0f,
-            -0.9f,  0.9f,   0.0f,      0.0f, 1.0f, 0.0f,
-            0.9f,   -0.9f,  0.0f,      0.0f, 0.0f, 1.0f,
-            0.9f,    0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
+    //      Position                    Color
+            -0.9f,  -0.9f,  0.0f,       1.0f, 0.0f, 0.0f,
+            -0.9f,  0.9f,   0.0f,       0.0f, 1.0f, 0.0f,
+            0.9f,   -0.9f,  0.0f,       0.0f, 0.0f, 1.0f,
+            0.9f,   0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
 
     };
     GLuint indices[] = {
