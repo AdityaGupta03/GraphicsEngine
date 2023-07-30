@@ -43,6 +43,12 @@ int test_file_reader() {
     return 0; 
 }
 
-int test_shader_class(){ // Finish this later
+int test_shader_class(){ // unfinished but set to fail right now
+    bool set_to_fail = false;
+
+    if (set_to_fail == true){
+        shader_class_fail = true;
+        return -1;
+    }
     return 0;
 }
