@@ -43,56 +43,6 @@ int test_file_reader() {
     return 0; 
 }
 
-int test_shader_class(){ // unfinished but set to fail right now
-    const char* defaultVertex = "../shaders/static.vert";
-    const char* defaultFragment = "../shaders/static.frag";
-    const char* defaultFail = "...";
-
-    GLfloat vertices[] = {
-
-    //      Position                                
-            -0.9f,  -0.9f,  0.0f, 
-            -0.9f,  0.9f,   0.0f,  
-            0.9f,   -0.9f,  0.0f, 
-            0.9f,   0.9f,   0.0f,
-
-    };
-    GLuint indices[] = {
-        0, 1, 2,
-        0, 2, 3};
-
-    if (!glfwInit())
-    {
-        std::cerr << "Failed to initialize GLFW." << std::endl;
-        return -1;
-    }
-
-    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    GLFWwindow *window = glfwCreateWindow(1, 1, "", nullptr, nullptr);
-    if (!window)
-    {
-        std::cerr << "Failed to create headless GLFW window." << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    try
-    {
-        // Shader shade = Shader(defaultVertex, defaultFragment);
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return -1;
-    }
-
-    // Clean up and terminate GLFW
-    glfwDestroyWindow(window);
-    glfwTerminate();
-
+int test_shader_class(){ // Finish this later
     return 0;
 }
