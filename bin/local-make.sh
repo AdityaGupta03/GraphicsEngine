@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "$PWD" == "$(dirname "$(realpath "$0")")" ]; then
+    cd ..
+fi
+
 echo
 # Remove build directory and create an empty one
 cd build 2> /dev/null
