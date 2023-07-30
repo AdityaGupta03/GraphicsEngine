@@ -33,9 +33,6 @@ static void frame_resize_callback(GLFWwindow *window, int width, int height) {
 
 void start_frame() {
 
-    std::string vertexShaderPath = "../shaders/static.vert";
-    std::string fragmentShaderPath = "../shaders/static.frag";
-
     glfwSetErrorCallback(error_callback); 
 
     if (!glfwInit()) { // initialize glfw

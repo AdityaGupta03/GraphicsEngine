@@ -1,6 +1,9 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "shader_tests.h"
 #include "shader.h"
 #include "utils.h"
+#include "frame.h"
 
 bool file_reader_fail = false;
 bool shader_class_fail = false;
@@ -41,11 +44,55 @@ int test_file_reader() {
 }
 
 int test_shader_class(){ // unfinished but set to fail right now
-    bool set_to_fail = false;
+    const char* defaultVertex = "../shaders/static.vert";
+    const char* defaultFragment = "../shaders/static.frag";
+    const char* defaultFail = "...";
 
-    if (set_to_fail == true){
-        shader_class_fail = true;
+    GLfloat vertices[] = {
+
+    //      Position                                
+            -0.9f,  -0.9f,  0.0f, 
+            -0.9f,  0.9f,   0.0f,  
+            0.9f,   -0.9f,  0.0f, 
+            0.9f,   0.9f,   0.0f,
+
+    };
+    GLuint indices[] = {
+        0, 1, 2,
+        0, 2, 3};
+
+    if (!glfwInit())
+    {
+        std::cerr << "Failed to initialize GLFW." << std::endl;
         return -1;
     }
+
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    GLFWwindow *window = glfwCreateWindow(1, 1, "", nullptr, nullptr);
+    if (!window)
+    {
+        std::cerr << "Failed to create headless GLFW window." << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    try
+    {
+        // Shader shade = Shader(defaultVertex, defaultFragment);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
+
+    // Clean up and terminate GLFW
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
     return 0;
 }
