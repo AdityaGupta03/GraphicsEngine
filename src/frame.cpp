@@ -50,10 +50,10 @@ void start_frame() {
     GLfloat vertices[] = {
 
     //      Position                                    Color
-            -0.9f, -1.0f * float(sqrt(3)) / 3, 0.0f,     1.0f, 0.0f, 0.0f,
-            -0.9f, 1.0f * float(sqrt(3)) / 3, 0.0f,      0.0f, 1.0f, 0.0f,
-            0.9f, -1.0f * float(sqrt(3) / 3), 0.0f,      0.0f, 0.0f, 1.0f,
-            0.9f, 1.0f * float(sqrt(3) / 3), 0.0f,       1.0f, 1.0f, 0.0f,
+            -0.9f,  -0.9f,  0.0f,     1.0f, 0.0f, 0.0f,
+            -0.9f,  0.9f,   0.0f,      0.0f, 1.0f, 0.0f,
+            0.9f,   -0.9f,  0.0f,      0.0f, 0.0f, 1.0f,
+            0.9f,    0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
 
     };
     GLuint indices[] = {
@@ -83,13 +83,14 @@ void start_frame() {
 
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); // no idea what this does.
 
+
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
     
         shaderProgram.Activate();
-        glUniform1f(uniID, 0.5f);
+        glUniform1f(uniID, 0.0f);
 
         VAO1.Bind(); // Bind the vertex array object
 
@@ -131,7 +132,7 @@ void set_window_hints() {
 GLFWwindow *create_window() {
 
     // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
-    GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1000, 1000, "Graphics Engine", nullptr, nullptr);
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
