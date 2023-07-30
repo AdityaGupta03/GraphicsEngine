@@ -33,8 +33,8 @@ static void frame_resize_callback(GLFWwindow *window, int width, int height) {
 
 void start_frame() {
 
-    std::string vertexShaderPath = "../shaders/default.vert";
-    std::string fragmentShaderPath = "../shaders/default.frag";
+    std::string vertexShaderPath = "../shaders/static.vert";
+    std::string fragmentShaderPath = "../shaders/static.frag";
 
     glfwSetErrorCallback(error_callback); 
 
@@ -50,10 +50,10 @@ void start_frame() {
     GLfloat vertices[] = {
 
     //      Position                                    Color
-            -0.9f, -1.0f * float(sqrt(3)) / 3, 0.0f,    // 1.0f, 0.0f, 0.0f,
-            -0.9f, 1.0f * float(sqrt(3)) / 3, 0.0f,     // 0.0f, 1.0f, 0.0f,
-            0.9f, -1.0f * float(sqrt(3) / 3), 0.0f,     // 0.0f, 0.0f, 1.0f,
-            0.9f, 1.0f * float(sqrt(3) / 3), 0.0f,      //1.0f, 1.0f, 0.0f,
+            -0.9f, -1.0f * float(sqrt(3)) / 3, 0.0f,     // 1.0f, 0.0f, 0.0f,
+            -0.9f, 1.0f * float(sqrt(3)) / 3, 0.0f,      // 0.0f, 1.0f, 0.0f,
+            0.9f, -1.0f * float(sqrt(3) / 3), 0.0f,      // 0.0f, 0.0f, 1.0f,
+            0.9f, 1.0f * float(sqrt(3) / 3), 0.0f,       //1.0f, 1.0f, 0.0f,
     };
 
     GLuint indices[] = {

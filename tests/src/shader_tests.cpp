@@ -22,8 +22,8 @@ int run_shader_tests() {
 }
 
 int test_file_reader() {
-    const char* defaultVertex = "../shaders/default.frag";
-    const char* defaultFragment = "../shaders/default.frag";
+    const char* defaultVertex = "../shaders/static.frag";
+    const char* defaultFragment = "../shaders/static.frag";
     const char* defaultFail = "...";
 
     std::string ShaderContents = get_file_contents(defaultVertex);
