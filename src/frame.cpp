@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <frame.h>
+#include <random>
 
 #include "vertex.h"
 #include "model.h"
@@ -10,6 +11,7 @@
 #include "VBO.h"
 #include "VAO.h"
 #include "EBO.h"
+
 
 #ifdef __APPLE__
 #define IS_APPLE_COMPUTER true
@@ -44,30 +46,53 @@ void start_frame() {
 
     GLFWwindow *window = create_window();
 
-    GLfloat vertices[] = {
+//    GLfloat vertices[] = {
+//
+//    //      Position                    Color
+//            -0.9f,  -0.9f,  0.0f,       1.0f, 0.0f, 0.0f,
+//            -0.9f,  0.9f,   0.0f,       0.0f, 1.0f, 0.0f,
+//            0.9f,   -0.9f,  0.0f,       0.0f, 0.0f, 1.0f,
+//            0.9f,   0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
+//
+//    };
+//    GLuint indices[] = {
+//            0, 1, 2,
+//            0, 2, 3
+//    };
 
-    //      Position                    Color
-            -0.9f,  -0.9f,  0.0f,       1.0f, 0.0f, 0.0f,
-            -0.9f,  0.9f,   0.0f,       0.0f, 1.0f, 0.0f,
-            0.9f,   -0.9f,  0.0f,       0.0f, 0.0f, 1.0f,
-            0.9f,   0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
-
+    std::vector<Matrix> matrices{
+            Matrix(0, 1, 2),
+            Matrix(0, 2, 3)
     };
-    GLuint indices[] = {
-            0, 1, 2,
-            0, 2, 3
-    };
+    Model model = Model("../objFiles/cow.obj");
+    GLuint *indices = new GLuint [model.faces.size() * 3];
+    for (int i = 0; i < model.faces.size(); i ++) {
+        indices[i * 3] = model.faces[i].indices[0];
+        indices[i * 3 + 1] = model.faces[i].indices[1];
+        indices[i * 3 + 2] = model.faces[i].indices[2];
+    }
 
+
+    GLfloat *vertices = new GLfloat[model.vertices.size() * 6];
+    for (int i = 0; i < model.vertices.size(); i ++) {
+        Vertex temp = model.vertices[i];
+        vertices[i * 6] = temp.x;
+        vertices[i * 6 + 1] = temp.y;
+        vertices[i * 6 + 2] = temp.z;
+        vertices[i * 6 + 3] = round(((float)rand())/((float)RAND_MAX));
+        vertices[i * 6 + 4] = round(((float)rand())/((float)RAND_MAX));
+        vertices[i * 6 + 5] = round(((float)rand())/((float)RAND_MAX));
+    }
     // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
     Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
 
     VAO VAO1;
     VAO1.Bind();
 
-    VBO VBO1(vertices, sizeof(vertices));
+    VBO VBO1(vertices, model.vertices.size() * 6 * sizeof(float));
 
     // Generates the EBO and binds it
-    EBO EBO1(indices, sizeof(indices));
+    EBO EBO1(indices, model.faces.size() * 3 * sizeof(int));
 
     // VAO1.LinkVBO(VBO1, 0, 3);
     VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
@@ -87,11 +112,11 @@ void start_frame() {
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
     
         shaderProgram.Activate();
-        glUniform1f(uniID, 0.0f); // second number is scale factor if you want to scale the triangles
+        glUniform1f(uniID, -0.9f); // second number is scale factor if you want to scale the triangles
 
         VAO1.Bind(); // Bind the vertex array object
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, model.faces.size() * 3, GL_UNSIGNED_INT, 0);
         // glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
