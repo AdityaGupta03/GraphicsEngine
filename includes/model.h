@@ -1,5 +1,8 @@
 #include "matrix.h"
 #include <vector>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 #ifndef GRAPHICSENGINE_MODEL_H
 #define GRAPHICSENGINE_MODEL_H

@@ -1,8 +1,4 @@
 #include "model.h"
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <filesystem> // Include this header for C++17 or later
 
 Model::Model(std::vector<Matrix> faces, std::vector<Vertex> vertices) {
 
@@ -26,7 +22,7 @@ Model::Model(std::string path) {
     std::string line;
     while (std::getline(file, line)) {
         // Process the line here
-        if (line.length() == 0) {
+        if (line.length() == 0 || line[0] == '#' /* || (line[0] == 'v' && line[1] != ' ') || ((line[0] == 'f' && line[1] != ' ')) */) {
             continue;
         }
         std::string firstChar = line.substr(0, 1);
@@ -39,11 +35,10 @@ Model::Model(std::string path) {
         float z = std::stof(zstr);
         if (firstChar.compare(0, 1, "v") == 0) {
             // Add vertex to vertices
-            tempVertices.push_back(Vertex{x / 3, y / 3 - float(0.5), z / 3});
-            std::cout << line;
+            tempVertices.push_back(Vertex{x, y, z});
         }
         else if (firstChar.compare(0, 1, "f") == 0) {
-            tempFaces.push_back(Matrix{static_cast<int>(x) -1 , static_cast<int>(y) -1, static_cast<int>(z) - 1});
+            tempFaces.push_back(Matrix{static_cast<int>(x) - 1 , static_cast<int>(y) -1, static_cast<int>(z) - 1});
             // add face to faces
         }
     }
