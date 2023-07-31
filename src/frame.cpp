@@ -87,7 +87,7 @@ void start_frame() {
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
     
         shaderProgram.Activate();
-        glUniform1f(uniID, 0.0f);
+        glUniform1f(uniID, 0.0f); // second number is scale factor if you want to scale the triangles
 
         VAO1.Bind(); // Bind the vertex array object
 
