@@ -33,9 +33,6 @@ static void frame_resize_callback(GLFWwindow *window, int width, int height) {
 
 void start_frame() {
 
-    std::string vertexShaderPath = "../shaders/default.vert";
-    std::string fragmentShaderPath = "../shaders/default.frag";
-
     glfwSetErrorCallback(error_callback); 
 
     if (!glfwInit()) { // initialize glfw
@@ -49,19 +46,20 @@ void start_frame() {
 
     GLfloat vertices[] = {
 
-    //      Position                                    Color
-            -0.9f, -1.0f * float(sqrt(3)) / 3, 0.0f,    // 1.0f, 0.0f, 0.0f,
-            -0.9f, 1.0f * float(sqrt(3)) / 3, 0.0f,     // 0.0f, 1.0f, 0.0f,
-            0.9f, -1.0f * float(sqrt(3) / 3), 0.0f,     // 0.0f, 0.0f, 1.0f,
-            0.9f, 1.0f * float(sqrt(3) / 3), 0.0f,      //1.0f, 1.0f, 0.0f,
-    };
+    //      Position                    Color
+            -0.9f,  -0.9f,  0.0f,       1.0f, 0.0f, 0.0f,
+            -0.9f,  0.9f,   0.0f,       0.0f, 1.0f, 0.0f,
+            0.9f,   -0.9f,  0.0f,       0.0f, 0.0f, 1.0f,
+            0.9f,   0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
 
+    };
     GLuint indices[] = {
             0, 1, 2,
             0, 2, 3
     };
 
-    Shader shaderProgram = Shader("../shaders/default.vert", "../shaders/default.frag");
+    // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
+    Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
 
     VAO VAO1;
     VAO1.Bind();
@@ -71,11 +69,17 @@ void start_frame() {
     // Generates the EBO and binds it
     EBO EBO1(indices, sizeof(indices));
 
-    VAO1.LinkVBO(VBO1, 0, 3);
+    // VAO1.LinkVBO(VBO1, 0, 3);
+    VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+                    // VBO, layout, numComponents, type, stride, offset --> for example the offset for the color is 3 * the size of a float because we have the coordinates, then offset by 3 floats to get to the color
 
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
+
+    GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); // no idea what this does.
+
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
         glClearColor(0.07f, 0.13f, 0.17f,
@@ -83,11 +87,12 @@ void start_frame() {
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
     
         shaderProgram.Activate();
+        glUniform1f(uniID, 0.0f); // second number is scale factor if you want to scale the triangles
 
         VAO1.Bind(); // Bind the vertex array object
 
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
@@ -124,7 +129,7 @@ void set_window_hints() {
 GLFWwindow *create_window() {
 
     // glfwCreateWindow(width, height, window name, full screen or not, unimportant)
-    GLFWwindow *window = glfwCreateWindow(800, 800, "Graphics Engine", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1000, 1000, "Graphics Engine", nullptr, nullptr);
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();

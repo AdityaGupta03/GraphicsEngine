@@ -1,6 +1,9 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "shader_tests.h"
 #include "shader.h"
 #include "utils.h"
+#include "frame.h"
 
 bool file_reader_fail = false;
 bool shader_class_fail = false;
@@ -22,8 +25,8 @@ int run_shader_tests() {
 }
 
 int test_file_reader() {
-    const char* defaultVertex = "../shaders/default.frag";
-    const char* defaultFragment = "../shaders/default.frag";
+    const char* defaultVertex = "../shaders/static.frag";
+    const char* defaultFragment = "../shaders/static.frag";
     const char* defaultFail = "...";
 
     std::string ShaderContents = get_file_contents(defaultVertex);

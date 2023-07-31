@@ -26,10 +26,12 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile){
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexSource, NULL);
     glCompileShader(vertexShader);
+    compileErrors(vertexShader, "Vertex");
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
     glCompileShader(fragmentShader);
+    compileErrors(fragmentShader, "Fragment");
 
     // Create the Shader program object and attach the vertex and fragment shader
     ID = glCreateProgram();
@@ -48,4 +50,14 @@ void Shader::Activate(){
 
 void Shader::Delete(){
     glDeleteProgram(ID);
+}
+
+void Shader::compileErrors(GLuint shader, const std::string& type) {
+        GLint success;
+        GLchar infoLog[1024];
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
+            std::cout << "\033[1;31m" << "Error: " << type << " Shader Compilation Failed:\n" << infoLog  << "\033[0m" << std::endl;
+        }
 }

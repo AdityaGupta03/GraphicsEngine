@@ -63,8 +63,8 @@ add_executable(UnitTests
         src/shader.cpp
         src/vertex.cpp
         src/glad.c
-        shaders/default.vert
-        shaders/default.frag
+        shaders/static.vert
+        shaders/static.frag
 )
 
 # Include directories for unit tests

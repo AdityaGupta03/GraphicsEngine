@@ -17,6 +17,8 @@ class Shader {
 
         void Activate();
         void Delete();
+
+        void compileErrors(GLuint shader, const std::string &type);
 };
 
 #endif //SHADER_H
