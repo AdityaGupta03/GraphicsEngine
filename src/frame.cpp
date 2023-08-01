@@ -78,13 +78,14 @@ void start_frame() {
     GLfloat *vertices = new GLfloat[model.vertices.size() * 6];
     for (int i = 0; i < model.vertices.size(); i ++) {
         float clr = round(((float)rand())/((float)RAND_MAX));
+        model.vertices[i].color = Color(clr, clr, clr, 0);
         Vertex temp = model.vertices[i];
         vertices[i * 6] = temp.x;
         vertices[i * 6 + 1] = temp.y;
         vertices[i * 6 + 2] = temp.z;
-        vertices[i * 6 + 3] = clr;
-        vertices[i * 6 + 4] = clr;
-        vertices[i * 6 + 5] = clr;
+        vertices[i * 6 + 3] = temp.color.r;
+        vertices[i * 6 + 4] = temp.color.g;
+        vertices[i * 6 + 5] = temp.color.b;
     }
     // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
     Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
@@ -110,6 +111,32 @@ void start_frame() {
 
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
+        for (int i = 0; i < model.faces.size(); i ++) {
+            indices[i * 3] = model.faces[i].indices[0];
+            indices[i * 3 + 1] = model.faces[i].indices[1];
+            indices[i * 3 + 2] = model.faces[i].indices[2];
+        }
+
+        for (int i = 0; i < model.vertices.size(); i ++) {
+//            float clr = round(((float)rand())/((float)RAND_MAX));
+            Vertex temp = model.vertices[i];
+            vertices[i * 6] = temp.x;
+            vertices[i * 6 + 1] = temp.y;
+            vertices[i * 6 + 2] = temp.z;
+            vertices[i * 6 + 3] = temp.color.r;
+            vertices[i * 6 + 4] = temp.color.g;
+            vertices[i * 6 + 5] = temp.color.b;
+        }
+        VAO1.Bind();
+        VBO1 = VBO(vertices, model.vertices.size() * 6 * sizeof(float));
+        EBO1 = EBO(indices, model.faces.size() * 3 * sizeof(int));
+        VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+        VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        VAO1.Unbind();
+        VBO1.Unbind();
+        EBO1.Unbind();
+
+        model.rotate(0.005, 0.01, 0);
         glEnable(GL_DEPTH_TEST);
 // Accept fragment if it closer to the camera than the former one
         glDepthFunc(GL_LESS);

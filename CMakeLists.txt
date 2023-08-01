@@ -40,7 +40,7 @@ set(SOURCES
         includes/VBO.h
         includes/EBO.h
         includes/VAO.h
-        includes/shader.h)
+        includes/shader.h src/color.cpp includes/color.h)
 
 # Add GLAD library
 add_library(glad src/glad.c)
