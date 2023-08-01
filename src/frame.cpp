@@ -65,6 +65,8 @@ void start_frame() {
             Matrix(0, 2, 3)
     };
     Model model = Model("../objFiles/cow.obj");
+//    model.translate(2.5, 2.5, 0);
+    model.rotate(0, 45, 0);
     GLuint *indices = new GLuint [model.faces.size() * 3];
     for (int i = 0; i < model.faces.size(); i ++) {
         indices[i * 3] = model.faces[i].indices[0];
@@ -75,13 +77,14 @@ void start_frame() {
 
     GLfloat *vertices = new GLfloat[model.vertices.size() * 6];
     for (int i = 0; i < model.vertices.size(); i ++) {
+        float clr = round(((float)rand())/((float)RAND_MAX));
         Vertex temp = model.vertices[i];
         vertices[i * 6] = temp.x;
         vertices[i * 6 + 1] = temp.y;
         vertices[i * 6 + 2] = temp.z;
-        vertices[i * 6 + 3] = round(((float)rand())/((float)RAND_MAX));
-        vertices[i * 6 + 4] = round(((float)rand())/((float)RAND_MAX));
-        vertices[i * 6 + 5] = round(((float)rand())/((float)RAND_MAX));
+        vertices[i * 6 + 3] = clr;
+        vertices[i * 6 + 4] = clr;
+        vertices[i * 6 + 5] = clr;
     }
     // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
     Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
@@ -107,6 +110,11 @@ void start_frame() {
 
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
+        glEnable(GL_DEPTH_TEST);
+// Accept fragment if it closer to the camera than the former one
+        glDepthFunc(GL_LESS);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
