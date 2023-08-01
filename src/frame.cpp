@@ -12,14 +12,11 @@
 #include "VAO.h"
 #include "EBO.h"
 
-
 #ifdef __APPLE__
 #define IS_APPLE_COMPUTER true
 #else
 #define IS_APPLE_COMPUTER false
 #endif
-
-
 
 static void error_callback(int err_code, const char *description) {
 
@@ -45,20 +42,6 @@ void start_frame() {
     set_window_hints();
 
     GLFWwindow *window = create_window();
-
-//    GLfloat vertices[] = {
-//
-//    //      Position                    Color
-//            -0.9f,  -0.9f,  0.0f,       1.0f, 0.0f, 0.0f,
-//            -0.9f,  0.9f,   0.0f,       0.0f, 1.0f, 0.0f,
-//            0.9f,   -0.9f,  0.0f,       0.0f, 0.0f, 1.0f,
-//            0.9f,   0.9f,   0.0f,       1.0f, 1.0f, 0.0f,
-//
-//    };
-//    GLuint indices[] = {
-//            0, 1, 2,
-//            0, 2, 3
-//    };
 
     std::vector<Matrix> matrices{
             Matrix(0, 1, 2),
