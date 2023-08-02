@@ -62,9 +62,9 @@ void start_frame() {
         vertices[i * 6] = temp.x;
         vertices[i * 6 + 1] = temp.y;
         vertices[i * 6 + 2] = temp.z;
-        vertices[i * 6 + 3] = round(((float)rand())/((float)RAND_MAX));
-        vertices[i * 6 + 4] = round(((float)rand())/((float)RAND_MAX));
-        vertices[i * 6 + 5] = round(((float)rand())/((float)RAND_MAX));
+        vertices[i * 6 + 3] = 1.0;
+        vertices[i * 6 + 4] = 2000*fabs(float(temp.z)/((float)model.vertices.size()));
+        vertices[i * 6 + 5] = 0.0;
     }
     // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
     Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
