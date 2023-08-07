@@ -57,6 +57,11 @@ void start_frame() {
         indices[i * 3 + 2] = model.faces[i].indices[2];
     }
 
+    int textureChords[4][2] = {
+        {0, 0},
+        {1, 0},
+        {1, 1},
+        {0, 1}};
 
     GLfloat *vertices = new GLfloat[model.vertices.size() * 6];
     for (int i = 0; i < model.vertices.size(); i ++) {
@@ -69,6 +74,8 @@ void start_frame() {
         vertices[i * 6 + 3] = temp.color.r;
         vertices[i * 6 + 4] = temp.color.g;
         vertices[i * 6 + 5] = temp.color.b;
+        vertices[i * 8 + 6] = textureChords[i % 4][0];
+        vertices[i * 8 + 7] = textureChords[i % 4][1];
     }
     // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
     Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
@@ -93,6 +100,8 @@ void start_frame() {
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); // no idea what this does.
 
 
+
+
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
         for (int i = 0; i < model.faces.size(); i ++) {
             indices[i * 3] = model.faces[i].indices[0];
@@ -103,13 +112,16 @@ void start_frame() {
         for (int i = 0; i < model.vertices.size(); i ++) {
 //            float clr = round(((float)rand())/((float)RAND_MAX));
             Vertex temp = model.vertices[i];
-            vertices[i * 6] = temp.x;
-            vertices[i * 6 + 1] = temp.y;
-            vertices[i * 6 + 2] = temp.z;
-            vertices[i * 6 + 3] = temp.color.r;
-            vertices[i * 6 + 4] = temp.color.g;
-            vertices[i * 6 + 5] = temp.color.b;
+            vertices[i * 8] = temp.x;
+            vertices[i * 8 + 1] = temp.y;
+            vertices[i * 8 + 2] = temp.z;
+            vertices[i * 8 + 3] = temp.color.r;
+            vertices[i * 8 + 4] = temp.color.g;
+            vertices[i * 8 + 5] = temp.color.b;
+            vertices[i * 8 + 6] = textureChords[i % 4][0];
+            vertices[i * 8 + 7] = textureChords[i % 4][1];
         }
+
         VAO1.Bind();
         VBO1 = VBO(vertices, model.vertices.size() * 6 * sizeof(float));
         EBO1 = EBO(indices, model.faces.size() * 3 * sizeof(int));
