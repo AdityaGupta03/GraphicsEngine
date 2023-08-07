@@ -4,7 +4,7 @@ Model::Model(std::vector<Matrix> faces, std::vector<Vertex> vertices) {
 
     this->faces = faces;
     this->vertices = vertices;
-
+    this->center = this->calculateOrigin();
 }
 
 Model::Model(std::string path) {
@@ -45,6 +45,7 @@ Model::Model(std::string path) {
     file.close();
     this->faces = tempFaces;
     this->vertices = tempVertices;
+    this->center = this->calculateOrigin();
 }
 
 std::vector<int> Model::getAllIndices() {
@@ -58,5 +59,64 @@ std::vector<int> Model::getAllIndices() {
 
     return indices;
 
+}
+
+void Model::translate(float x, float y, float z) {
+    for (int i = 0; i < vertices.size(); i ++) {
+        vertices[i].x += x;
+        vertices[i].y += y;
+        vertices[i].z += z;
+
+    }
+}
+
+void Model::rotate(float x_angle, float y_angle, float z_angle) {
+    // Calculate the sin and cos of the rotation angles
+    float sinX = sin(x_angle);
+    float cosX = cos(x_angle);
+    float sinY = sin(y_angle);
+    float cosY = cos(y_angle);
+    float sinZ = sin(z_angle);
+    float cosZ = cos(z_angle);
+
+    for (auto& point : vertices) {
+        // Translate the point to the center
+        float translatedX = point.x - center.x;
+        float translatedY = point.y - center.y;
+        float translatedZ = point.z - center.z;
+
+        // Apply rotation around X-axis
+        float rotatedX = translatedX;
+        float rotatedY = translatedY * cosX - translatedZ * sinX;
+        float rotatedZ = translatedY * sinX + translatedZ * cosX;
+
+        // Apply rotation around Y-axis
+        float tempX = rotatedX * cosY + rotatedZ * sinY;
+        float tempZ = -rotatedX * sinY + rotatedZ * cosY;
+
+        // Apply rotation around Z-axis
+        point.x = tempX * cosZ - rotatedY * sinZ;
+        point.y = tempX * sinZ + rotatedY * cosZ;
+        point.z = tempZ;
+
+        // Translate the point back to the original position
+        point.x += center.x;
+        point.y += center.y;
+        point.z += center.z;
+    }
+}
+
+Vertex Model::calculateOrigin() {
+    float centerX = 0;
+    float centerY = 0;
+    float centerZ = 0;
+    float centerCt = 0;
+    for (Vertex v : vertices) {
+        centerX += v.x;
+        centerY += v.y;
+        centerZ += v.z;
+        centerCt += 1;
+    }
+    return Vertex(centerX/centerCt, centerY/centerCt, centerZ/centerCt);
 }
 

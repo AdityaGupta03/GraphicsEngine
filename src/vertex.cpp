@@ -20,3 +20,10 @@ float Vertex::operator[](int i) noexcept(false) {
         throw std::runtime_error("Invalid vertex index.");
 
 }
+
+Vertex::Vertex(float x, float y, float z, Color c) {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->color = c;
+}
