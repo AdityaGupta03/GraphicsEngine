@@ -34,3 +34,12 @@ Usage:
 ```
 ./bin/local-make.sh [tests] 
 ```
+
+### Progress .. trippy!
+The cow is multi-colored because we just assigned random color values to each face leading to this super cool trippy effect.
+<div align=center>
+    <img src="https://github.com/AdityaGupta03/GraphicsEngine/assets/30964417/c74c526a-7d16-4118-8d78-6a5630c52d65" alt="Image" style="width: 45%; height: auto;">
+
+</div>
+
+
