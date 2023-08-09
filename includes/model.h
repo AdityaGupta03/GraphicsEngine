@@ -21,7 +21,7 @@ public:
 
     void translate(float x, float y, float z);
 
-    void rotate(float x_angle, float y_angle, float z_angle);
+    void rotate(float x_angle, float y_angle, float z_angle, Vertex v);
 
     Vertex calculateOrigin();
 
