@@ -130,8 +130,6 @@ void start_frame() {
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
 
-
-        // TODO: COMBINE LISTS AND RENDER ALL AT ONCE
         for (int i = 0; i < vboList.size(); i++) {
             VAOMain.LinkAttrib(vboList[i], 0, 3, GL_FLOAT, 6 * sizeof(float), (void *) 0);
             VAOMain.LinkAttrib(vboList[i], 1, 3, GL_FLOAT, 6 * sizeof(float), (void *) (3 * sizeof(float)));
@@ -205,9 +203,6 @@ GLFWwindow *create_window() {
     return window;
 
 }
-
-// Eventually we need a method that allows us to update all indices of all models. That will go here
-// It will call the method where each model updates its own indices
 
 int main() {
 
