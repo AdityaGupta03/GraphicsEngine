@@ -33,9 +33,10 @@
 // Vertex Shader source code
 const char *vertexShaderSource = "#version 330 core\n"
 								 "layout (location = 0) in vec3 aPos;\n"
+                                 "uniform mat4 view;\n"
 								 "void main()\n"
 								 "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                 "   gl_Position = view * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
                                  "}\0";
 // Fragment Shader source code
 const char *fragmentShaderSource = "#version 330 core\n"
@@ -44,6 +45,21 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "{\n"
                                    "   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
                                    "}\n\0";
+
+static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xOffset = xpos - lastX;
+    float yOffset = lastY - ypos;  // Reversed since y-coordinates range from bottom to top
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.processMouseMovement(xOffset, yOffset);
+}
 
 static void error_callback(int err_code, const char *description) {
 
@@ -69,6 +85,8 @@ void start_frame() {
 
     set_window_hints();
     GLFWwindow *window = create_window();
+    glfwSetCursorPosCallback(window, mouse_callback);
+
     GLuint shaderProgram = set_shaders();
 
     std::vector<Vertex> vertices{
@@ -138,11 +156,24 @@ void start_frame() {
 //    glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind the vertex buffer object
 //    glBindVertexArray(0);              // Unbind the vertex array object
 
+    float lastFrame = 0.0f;
+    float deltaTime = 0.0f;
+
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        processInput(window, deltaTime);
+
         glClearColor(0.07f, 0.13f, 0.17f,
                      1.0f); // Set the clear color to a dark blue, color goes (r,g,b,a) .. a is alpha, which is transparency
         glClear(GL_COLOR_BUFFER_BIT);             // Clear the color buffer, which is the buffer that stores the color values for each pixel
         glUseProgram(shaderProgram);             // Use the shader program that we created earlier
+
+        glm::mat4 view = camera.getViewMatrix();
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
+
         glBindVertexArray(VAO);                     // Bind the vertex array object
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);                 // Swap the front buffer with the back buffer
@@ -225,6 +256,20 @@ GLuint set_shaders() {
 
     return shaderProgram;
 
+}
+
+void processInput(GLFWwindow* window, float deltaTime) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.processKeyboard(RIGHT, deltaTime);
 }
 
 int main() {
