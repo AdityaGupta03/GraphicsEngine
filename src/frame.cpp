@@ -101,9 +101,14 @@ void start_frame() {
     shaderProgram.Activate();
     glUniform1f(uniID, -0.9f); // second number is scale factor if you want to scale the triangles
 
+    model.rotate(3.14, 0, 0, model.center);
+    model2.rotate(0, 0, 3.14/2.0, model2.center);
+
+    model.setCenter(Vertex(0,3,2));
+
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
-        model.rotate(0, 0.01, 0, model.center);
-        model2.rotate(0, -0.01, 0, model2.center);
+        model.rotate(-0.02, 0.005, -0.01, model.center);
+        model2.rotate(0.01, -0.01, 0.005, model2.center);
 
 
         ModelUtils::update(vertices, indices, model);

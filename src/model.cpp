@@ -61,6 +61,10 @@ std::vector<int> Model::getAllIndices() {
 
 }
 
+void Model::setCenter(Vertex newCenter) {
+    this->center = newCenter;
+}
+
 void Model::translate(float x, float y, float z) {
     for (int i = 0; i < vertices.size(); i ++) {
         vertices[i].x += x;

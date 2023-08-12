@@ -20,7 +20,7 @@ public:
     std::vector<int> getAllIndices();
 
     void translate(float x, float y, float z);
-
+    void setCenter(Vertex newCenter);
     void rotate(float x_angle, float y_angle, float z_angle, Vertex v);
 
     Vertex calculateOrigin();
