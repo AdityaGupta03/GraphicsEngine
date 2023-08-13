@@ -61,16 +61,20 @@ std::vector<int> Model::getAllIndices() {
 
 }
 
+void Model::setCenter(Vertex newCenter) {
+    this->center = newCenter;
+}
+
 void Model::translate(float x, float y, float z) {
     for (int i = 0; i < vertices.size(); i ++) {
         vertices[i].x += x;
         vertices[i].y += y;
         vertices[i].z += z;
-
     }
+    center = this->calculateOrigin();
 }
 
-void Model::rotate(float x_angle, float y_angle, float z_angle) {
+void Model::rotate(float x_angle, float y_angle, float z_angle, Vertex v) {
     // Calculate the sin and cos of the rotation angles
     float sinX = sin(x_angle);
     float cosX = cos(x_angle);
@@ -81,9 +85,9 @@ void Model::rotate(float x_angle, float y_angle, float z_angle) {
 
     for (auto& point : vertices) {
         // Translate the point to the center
-        float translatedX = point.x - center.x;
-        float translatedY = point.y - center.y;
-        float translatedZ = point.z - center.z;
+        float translatedX = point.x - v.x;
+        float translatedY = point.y - v.y;
+        float translatedZ = point.z - v.z;
 
         // Apply rotation around X-axis
         float rotatedX = translatedX;
@@ -100,9 +104,9 @@ void Model::rotate(float x_angle, float y_angle, float z_angle) {
         point.z = tempZ;
 
         // Translate the point back to the original position
-        point.x += center.x;
-        point.y += center.y;
-        point.z += center.z;
+        point.x += v.x;
+        point.y += v.y;
+        point.z += v.z;
     }
 }
 
