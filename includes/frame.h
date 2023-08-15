@@ -6,6 +6,7 @@
 double lastX = 0.0;
 double lastY = 0.0;
 bool firstMouse = true;
+bool mouseButtonPressed = false;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -15,8 +16,6 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void start_frame();
 void set_window_hints();
 GLFWwindow *create_window();
-GLuint set_shaders();
-void processInput(GLFWwindow* window, float deltaTime);
 int main();
 
 #endif

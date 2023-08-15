@@ -2,6 +2,7 @@
 #define GRAPHICSENGINE_VERTEX_H
 
 #include <stdexcept>
+#include<iostream>
 
 class Vertex {
 public:

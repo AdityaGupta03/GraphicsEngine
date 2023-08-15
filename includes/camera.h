@@ -3,6 +3,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include "vertex.h"
+#include "model.h"
 
 enum CameraMovement {
     FORWARD,
@@ -23,6 +27,7 @@ public:
 
     glm::mat4 getViewMatrix();
 
+    void processInput(GLFWwindow* window, float deltaTime);
     void processKeyboard(CameraMovement direction, float deltaTime);
     void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
 
