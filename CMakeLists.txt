@@ -43,7 +43,10 @@ set(SOURCES
         includes/VAO.h
         includes/shader.h
         includes/camera.h
-)
+        src/color.cpp
+        includes/color.h
+        src/modelUtils.cpp
+        includes/modelUtils.h)
 
 # Add GLAD library
 add_library(glad src/glad.c)
@@ -68,6 +71,7 @@ add_executable(UnitTests
         src/glad.c
         shaders/static.vert
         shaders/static.frag
+        src/color.cpp
 )
 
 # Include directories for unit tests
