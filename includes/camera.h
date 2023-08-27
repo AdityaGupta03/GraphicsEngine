@@ -27,7 +27,6 @@ public:
 
     glm::mat4 getViewMatrix();
 
-    void processInput(GLFWwindow* window, float deltaTime);
     void processKeyboard(CameraMovement direction, float deltaTime);
     void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
 

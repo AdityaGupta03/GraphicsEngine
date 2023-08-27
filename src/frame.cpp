@@ -83,8 +83,6 @@ void processInput(GLFWwindow* window, float deltaTime) {
 
 }
 
-
-
 void start_frame() {
 
     glfwSetErrorCallback(error_callback); 
@@ -95,7 +93,6 @@ void start_frame() {
 
     /*An openGL profile is like a package of functions */
     set_window_hints();
-
     GLFWwindow *window = create_window();
 
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -128,7 +125,6 @@ void start_frame() {
         indices[i * 3 + 2] = model.faces[i].indices[2];
     }
 
-
     GLfloat *vertices = new GLfloat[model.vertices.size() * 6];
     for (int i = 0; i < model.vertices.size(); i ++) {
         Vertex temp = model.vertices[i];
@@ -139,8 +135,10 @@ void start_frame() {
         vertices[i * 6 + 4] = round(((float)rand())/((float)RAND_MAX));
         vertices[i * 6 + 5] = round(((float)rand())/((float)RAND_MAX));
     }
-    // Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
-    Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
+
+    bool staticColor = true;
+    Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
+//    Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
 
     VAO VAO1;
     VAO1.Bind();
@@ -153,7 +151,7 @@ void start_frame() {
     // VAO1.LinkVBO(VBO1, 0, 3);
     VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-                    // VBO, layout, numComponents, type, stride, offset --> for example the offset for the color is 3 * the size of a float because we have the coordinates, then offset by 3 floats to get to the color
+    // VBO, layout, numComponents, type, stride, offset --> for example the offset for the color is 3 * the size of a float because we have the coordinates, then offset by 3 floats to get to the color
 
     VAO1.Unbind();
     VBO1.Unbind();
@@ -162,6 +160,7 @@ void start_frame() {
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); // no idea what this does.
 
     double lastFrameTime = glfwGetTime();
+
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
 
@@ -175,11 +174,20 @@ void start_frame() {
         processInput(window, deltaTime);
     
         shaderProgram.Activate();
-        glUniform1f(uniID, -0.9f); // second number is scale factor if you want to scale the triangles
+        glUniform1f(uniID, 0.1f); // second number is scale factor if you want to scale the triangles
 
         auto view = camera.getViewMatrix();
-        auto location = glGetUniformLocation(shaderProgram.ID, "view");
-        glUniformMatrix4fv(location, 1, GL_FALSE, &view[0][0]);
+
+        glm::mat4 projection;
+        GLint projectionLocation;
+        if (staticColor) {
+            projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+            projectionLocation = glGetUniformLocation(shaderProgram.ID, "projection");
+            glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
+        }
+
+        auto viewLocation = glGetUniformLocation(shaderProgram.ID, "view");
+        glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]);
 
         VAO1.Bind(); // Bind the vertex array object
 
@@ -189,12 +197,12 @@ void start_frame() {
 
         glfwPollEvents(); // We need to tell GLFW to poll all of the processed "events", if it doesn't then the window will freeze
     }
+
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
 
-    glfwMakeContextCurrent(
-            window); // Make the window the current context .. context is a sort of object that holds the entirety of openGL
+    glfwMakeContextCurrent(window); // Make the window the current context .. context is a sort of object that holds the entirety of openGL
     glfwDestroyWindow(window); // Destroy the window
     glfwTerminate();           // Terminate glfw
 
