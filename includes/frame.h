@@ -8,7 +8,7 @@ double lastY = 0.0;
 bool firstMouse = true;
 bool mouseButtonPressed = false;
 
-Camera camera(glm::vec3(0.0f, 0.0f, 0.5f));
+Camera camera(glm::vec3(0.0f, 0.0f, -0.5f));
 
 static void error_callback(int err_code, const char *description);
 static void frame_resize_callback(GLFWwindow *window, int width, int height);

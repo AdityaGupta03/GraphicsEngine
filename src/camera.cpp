@@ -64,3 +64,9 @@ void Camera::updateCameraVectors() {
     up = glm::normalize(glm::cross(right, front));
 
 }
+
+float* Camera::getPosition() {
+
+    return new float[3] {this->position.x, this->position.y, this->position.z};
+
+}

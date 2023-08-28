@@ -73,20 +73,20 @@ void processInput(GLFWwindow* window, float deltaTime) {
         glfwSetWindowShouldClose(window, true);
 
     // Camera controls
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera.processKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         camera.processKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         camera.processKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.processKeyboard(RIGHT, deltaTime);
 
 }
 
 void start_frame() {
 
-    glfwSetErrorCallback(error_callback); 
+    glfwSetErrorCallback(error_callback);
 
     if (!glfwInit()) { // initialize glfw
         exit(EXIT_FAILURE);
@@ -139,9 +139,9 @@ void start_frame() {
 
     model.translate(-5, 0, 0);
 
-    bool staticColor = false;
-//    Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
-    Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
+    bool staticColor = true;
+    Shader shaderProgram = Shader("../shaders/static.vert", "../shaders/static.frag");
+//    Shader shaderProgram = Shader("../shaders/multiColor.vert", "../shaders/multiColor.frag");
 
     VAO VAOMain;
 
@@ -154,11 +154,23 @@ void start_frame() {
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
     shaderProgram.Activate();
-    glUniform1f(uniID, -0.9f);
+
+    if (staticColor)
+        glUniform1f(uniID, -0.1f);
+    else
+        glUniform1f(uniID, -0.9f);
 
     double lastFrameTime = glfwGetTime();
+    float* cameraPosition;
 
     while (!glfwWindowShouldClose(window)) { // While the window is not closed
+
+        cameraPosition = camera.getPosition();
+        std::cout << "\rCamera Position: " << std::setw(10) <<
+            cameraPosition[0] << ", " << std::setw(10)
+            << cameraPosition[1] << ", " << std::setw(10)
+            << cameraPosition[2] << std::setw(10) << std::flush;
+        delete(cameraPosition);
 
         double currentFrameTime = glfwGetTime();
         float deltaTime = currentFrameTime - lastFrameTime;
@@ -195,7 +207,7 @@ void start_frame() {
         glm::mat4 projection;
         GLint projectionLocation;
         if (staticColor) {
-            projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+            projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 300.0f);
             projectionLocation = glGetUniformLocation(shaderProgram.ID, "projection");
             glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
         }
@@ -208,7 +220,10 @@ void start_frame() {
         // Accept fragment if it closer to the camera than the former one
         glDepthFunc(GL_LESS);
         shaderProgram.Activate();
-        glUniform1f(uniID, -0.9f); // second number is scale factor if you want to scale the triangles
+        if (staticColor)
+            glUniform1f(uniID, -0.05f);
+        else
+            glUniform1f(uniID, -0.9f);
 
         for (int i = 0; i < vboList.size(); i++) {
             VAOMain.LinkAttrib(vboList[i], 0, 3, GL_FLOAT, 6 * sizeof(float), (void *) 0);
